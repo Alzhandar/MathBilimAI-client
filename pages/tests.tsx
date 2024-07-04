@@ -60,7 +60,7 @@ const Tests = () => {
 
     const handleSubmitTest = async () => {
         try {
-            const res = await api.post('/ai/submit-test', {
+            const res = await api.post('api/ai/submit-test', {
                 answers: selectedAnswers,
                 correctAnswers: questions.map(q => q.correctAnswer),
             }, {
