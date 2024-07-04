@@ -1,8 +1,8 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
-import { Card } from './ui/card';
-import { CardContent } from './ui/card';
+import { Card } from '../components/ui/card';
+import { CardContent } from '../components/ui/card';
 import Link from "next/link";
 import Img from "./images/Social-Math_2880x1700_Lede.jpg";
 
