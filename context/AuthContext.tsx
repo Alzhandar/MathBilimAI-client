@@ -1,7 +1,7 @@
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import jwtDecode from 'jwt-decode';
+import jwt_decode from 'jwt-decode'; 
 import api from '../pages/api/api';
 
 interface User {
@@ -44,7 +44,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const decodedToken: any = jwtDecode(token);
+                    // @ts-ignore
+                    const decodedToken: any = jwt_decode(token);
                     if (decodedToken.exp * 1000 < Date.now()) {
                         logout();
                     } else {

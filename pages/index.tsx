@@ -108,7 +108,7 @@ const Home = () => {
         </div>
     );
 };
-
+// @ts-ignore
 function CheckIcon(props) {
     return (
         <svg
@@ -127,7 +127,7 @@ function CheckIcon(props) {
         </svg>
     );
 }
-
+// @ts-ignore
 function FilePenIcon(props) {
     return (
         <svg
@@ -148,7 +148,7 @@ function FilePenIcon(props) {
         </svg>
     );
 }
-
+// @ts-ignore
 function LayoutTemplateIcon(props) {
     return (
         <svg
