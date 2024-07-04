@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../pages/api/api';
+import jsPDF from 'jspdf';
 
 interface Question {
     question: string;
@@ -75,6 +76,19 @@ const Tests = () => {
         }
     };
 
+    const handleDownloadPDF = () => {
+        const doc = new jsPDF();
+        doc.text(`Subject: ${subject}`, 10, 10);
+        doc.text(`Number of Questions: ${numQuestions}`, 10, 20);
+        questions.forEach((question, index) => {
+            doc.text(`${index + 1}. ${question.question}`, 10, 30 + index * 10);
+            question.options.forEach((option, idx) => {
+                doc.text(`${String.fromCharCode(65 + idx)}. ${option}`, 20, 35 + index * 10 + idx * 5);
+            });
+        });
+        doc.save('test.pdf');
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 md:p-6">
             <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 w-full max-w-2xl">
@@ -144,9 +158,15 @@ const Tests = () => {
                             ))}
                             <button
                                 onClick={handleSubmitTest}
-                                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300"
+                                className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors duration-300 mb-4"
                             >
                                 Submit Test
+                            </button>
+                            <button
+                                onClick={handleDownloadPDF}
+                                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+                            >
+                                Download Test
                             </button>
                         </div>
                     )
