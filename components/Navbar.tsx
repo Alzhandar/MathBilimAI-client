@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
@@ -8,10 +8,15 @@ import logo from '../pages/images/IMG_3235.jpg';
 const Navbar = () => {
     const { user, logout } = useAuth();
     const router = useRouter();
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
         router.push('/login');
+    };
+
+    const toggleMenu = () => {
+        setIsOpen(!isOpen);
     };
 
     return (
@@ -21,9 +26,14 @@ const Navbar = () => {
                     <Image src={logo} alt="MathTeachAI Logo" width={40} height={40} className="mr-2" />
                     <span className="text-white font-bold text-xl">MathTeachAI</span>
                 </div>
-                <ul className="flex space-x-4">
+                <div className="block md:hidden">
+                    <button onClick={toggleMenu} className="text-white focus:outline-none">
+                        ☰
+                    </button>
+                </div>
+                <ul className={`flex-col md:flex-row flex md:space-x-4 ${isOpen ? 'flex' : 'hidden'} md:flex`}>
                     {user && (
-                        <div className='font-bold space-x-2 flex items-center'>
+                        <div className='font-bold space-x-2 flex flex-col md:flex-row items-center'>
                             <Link href="/dashboard" legacyBehavior>
                                 <a className="text-white hover:text-gray-300">Dashboard</a>
                             </Link>

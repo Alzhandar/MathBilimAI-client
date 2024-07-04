@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import api from '../pages/api/api';
 
@@ -9,7 +8,7 @@ const Chat = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [editingTitle, setEditingTitle] = useState<boolean>(false);
     const [newTitle, setNewTitle] = useState<string>('');
-    const { user, chats, addMessageToChat, createNewChat, updateChatTitle } = useAuth();
+    const { chats, addMessageToChat, createNewChat, updateChatTitle } = useAuth();
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -70,14 +69,14 @@ const Chat = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 md:p-6">
             <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-6xl flex flex-col">
-                <div className="flex justify-between items-center mb-4">
+                <div className="flex flex-col md:flex-row justify-between items-center mb-4">
                     <button onClick={handleNewChat} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">
                         New Chat
                     </button>
                     <select
                         value={currentChatId}
                         onChange={(e) => handleChatSwitch(e.target.value)}
-                        className="border px-4 py-2 rounded-md"
+                        className="border px-4 py-2 rounded-md mt-2 md:mt-0"
                     >
                         {Object.keys(chats).map((chatId) => (
                             <option key={chatId} value={chatId}>
@@ -85,7 +84,7 @@ const Chat = () => {
                             </option>
                         ))}
                     </select>
-                    <div className="flex items-center">
+                    <div className="flex items-center mt-2 md:mt-0">
                         {editingTitle ? (
                             <div className="flex items-center">
                                 <input

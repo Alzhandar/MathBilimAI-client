@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import api from '../pages/api/api';
 
@@ -77,8 +76,8 @@ const Tests = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 md:p-6">
+            <div className="bg-white shadow-lg rounded-lg p-4 md:p-6 w-full max-w-2xl">
                 <h1 className="text-2xl font-bold mb-4 text-center">Take a Test</h1>
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="subject">
@@ -169,4 +168,3 @@ const Tests = () => {
 };
 
 export default Tests;
-
