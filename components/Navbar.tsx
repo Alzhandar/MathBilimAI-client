@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import logo from '../pages/images/IMG_3235.jpg';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
@@ -20,56 +18,70 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="bg-black p-4 shadow-md">
-            <div className="container mx-auto flex justify-between items-center">
+        <nav className="bg-white shadow-sm">
+            <div className="container mx-auto flex justify-between items-center py-4 px-4 md:px-6">
                 <div className="flex items-center">
-                    <Image src={logo} alt="MathTeachAI Logo" width={40} height={40} className="mr-2" />
-                    <span className="text-white font-bold text-xl">MathTeachAI</span>
+                    <span className="text-black font-bold text-2xl hover:text-blue-600 transition duration-300 cursor-pointer">MathTeachAI</span>
                 </div>
                 <div className="block md:hidden">
-                    <button onClick={toggleMenu} className="text-white focus:outline-none">
+                    <button onClick={toggleMenu} className="text-black focus:outline-none">
                         ☰
                     </button>
                 </div>
-                <ul className={`flex-col md:flex-row flex md:space-x-4 ${isOpen ? 'flex' : 'hidden'} md:flex`}>
-                    {user && (
-                        <div className='font-bold space-x-2 flex flex-col md:flex-row items-center'>
-                            <Link href="/dashboard" legacyBehavior>
-                                <a className="text-white hover:text-gray-300">Dashboard</a>
-                            </Link>
-                            <Link href="/chat" legacyBehavior>
-                                <a className="text-white hover:text-gray-300">Chat</a>
-                            </Link>
-                            <Link href="/tests" legacyBehavior>
-                                <a className="text-white hover:text-gray-300">Tests</a>
-                            </Link>
-                            <Link href="/materials" legacyBehavior>
-                                <a className="text-white hover:text-gray-300">Materials</a>
-                            </Link>
-                            <Link href="/account" legacyBehavior>
-                                <a className="text-white hover:text-gray-300">Account</a>
-                            </Link>
-                            <button onClick={handleLogout} className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 transition duration-300">Logout</button>
-                        </div>
-                    )}
-                    {!user && (
-                        <>
-                            <li>
-                                <Link href="/login" legacyBehavior>
-                                    <a className="text-white hover:text-gray-300">Login</a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/register" legacyBehavior>
-                                    <a className="text-white hover:text-gray-300">Register</a>
-                                </Link>
-                            </li>
-                        </>
-                    )}
-                </ul>
+                <div className={`md:flex md:items-center md:space-x-6 ${isOpen ? 'block' : 'hidden'} transition-all duration-300`}>
+                    <ul className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0 mt-4 md:mt-0">
+                        {user ? (
+                            <>
+                                <li>
+                                    <Link href="/dashboard" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Басты бет</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/chat" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Чат</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/tests" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Тесттер</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/materials" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Материалдар</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/upload-task" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Тапсырма жүктеу</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <button onClick={handleLogout} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-300">Шығу</button>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li>
+                                    <Link href="/login" legacyBehavior>
+                                        <a className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-300">Кіру</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/register" legacyBehavior>
+                                        <a className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-300">Тіркелу</a>
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                    </ul>
+                </div>
             </div>
         </nav>
     );
 };
 
 export default Navbar;
+
+

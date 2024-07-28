@@ -1,148 +1,146 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
-import api from '../pages/api/api';
+import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 const Chat = () => {
-    const [currentChatId, setCurrentChatId] = useState<string>('');
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState<string>('');
+    const [messages, setMessages] = useState<Array<{ role: string, content: string }>>([
+        { role: 'assistant', content: 'Сәлем! Менің атым Ернар, мен математика бойынша кез келген сұрақтарыңызға жауап беруге дайынмын.' }
+    ]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [editingTitle, setEditingTitle] = useState<boolean>(false);
-    const [newTitle, setNewTitle] = useState<string>('');
-    const { chats, addMessageToChat, createNewChat, updateChatTitle } = useAuth();
+    const { user } = useAuth();
+    const [isTyping, setIsTyping] = useState<boolean>(false);
+    const chatEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const storedChatId = localStorage.getItem('currentChatId');
-            if (storedChatId) {
-                setCurrentChatId(storedChatId);
-            } else {
-                const newChatId = createNewChat();
-                setCurrentChatId(newChatId);
-                localStorage.setItem('currentChatId', newChatId);
-            }
+        const storedMessages = localStorage.getItem('messages');
+        if (storedMessages) {
+            setMessages(JSON.parse(storedMessages));
         }
     }, []);
 
     useEffect(() => {
-        if (currentChatId) {
-            localStorage.setItem('currentChatId', currentChatId);
+        if (messages.length > 0) {
+            localStorage.setItem('messages', JSON.stringify(messages));
         }
-    }, [currentChatId]);
+        scrollToBottom();
+    }, [messages]);
 
     const handleSendMessage = async () => {
         if (message.trim() && !loading) {
             setLoading(true);
+            const newMessages = [...messages, { role: 'user', content: message }];
+            setMessages(newMessages);
+            setMessage('');
+            setIsTyping(true);
             try {
-                addMessageToChat(currentChatId, `You: ${message}`);
-                const res = await api.post('api/ai/chat', { question: message }, {
+                const res = await axios.post('http://localhost:5003/api/ai/chat', { messages: newMessages }, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 });
-                addMessageToChat(currentChatId, `Ernar: ${res.data.answer}`);
-                setMessage('');
+                setMessages([...newMessages, { role: 'assistant', content: res.data.answer }]);
             } catch (error) {
-                console.error('Error sending message:', error);
+                console.error('Хабарды жіберу қатесі:', error);
             } finally {
                 setLoading(false);
+                setIsTyping(false);
             }
         }
     };
 
-    const handleNewChat = () => {
-        const newChatId = createNewChat();
-        setCurrentChatId(newChatId);
-    };
-
-    const handleChatSwitch = (chatId: string) => {
-        setCurrentChatId(chatId);
-    };
-
-    const handleTitleChange = () => {
-        if (newTitle.trim()) {
-            updateChatTitle(currentChatId, newTitle);
-            setNewTitle('');
-            setEditingTitle(false);
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
         }
+    };
+
+    const scrollToBottom = () => {
+        chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 md:p-6">
-            <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-6xl flex flex-col">
-                <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-                    <button onClick={handleNewChat} className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300">
-                        New Chat
-                    </button>
-                    <select
-                        value={currentChatId}
-                        onChange={(e) => handleChatSwitch(e.target.value)}
-                        className="border px-4 py-2 rounded-md mt-2 md:mt-0"
-                    >
-                        {Object.keys(chats).map((chatId) => (
-                            <option key={chatId} value={chatId}>
-                                {chats[chatId].title}
-                            </option>
-                        ))}
-                    </select>
-                    <div className="flex items-center mt-2 md:mt-0">
-                        {editingTitle ? (
-                            <div className="flex items-center">
-                                <input
-                                    type="text"
-                                    value={newTitle}
-                                    onChange={(e) => setNewTitle(e.target.value)}
-                                    className="border px-2 py-1 rounded-md"
-                                />
-                                <button onClick={handleTitleChange} className="bg-green-500 text-white px-2 py-1 rounded-md ml-2">
-                                    Save
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex items-center">
-                                <span className="text-xl font-bold">{chats[currentChatId]?.title}</span>
-                                <button onClick={() => setEditingTitle(true)} className="bg-gray-200 text-gray-600 px-2 py-1 rounded-md ml-2">
-                                    Edit
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-                <div className="h-96 overflow-y-scroll p-4 border border-gray-200 rounded-lg mb-4 bg-gray-50">
-                    {currentChatId && chats[currentChatId]?.messages ? (
-                        chats[currentChatId].messages.map((msg, index) => (
-                            <div key={index} className={`flex ${msg.startsWith('You:') ? 'justify-end' : 'justify-start'} mb-2`}>
-                                <p className={`px-4 py-2 rounded-lg ${msg.startsWith('You:') ? 'bg-blue-100 text-black' : 'bg-gray-200 text-black'} max-w-xs break-words`}>
-                                    {msg}
-                                </p>
+            <div className="bg-white shadow-xl rounded-lg p-6 w-full max-w-6xl flex flex-col h-[85vh]">
+                <h1 className="text-3xl font-bold mb-4 text-center text-gray-800">Ернармен сөйлесу</h1>
+                <div className="flex-1 overflow-y-scroll p-4 border border-gray-200 rounded-lg mb-4 bg-gray-50 shadow-inner">
+                    {messages.length > 0 ? (
+                        messages.map((msg, index) => (
+                            <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} mb-2`}>
+                                <div className={`px-4 py-2 rounded-lg ${msg.role === 'user' ? 'bg-blue-100 text-black' : 'bg-gray-200 text-black'} max-w-xs break-words`}>
+                                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                                        {msg.content}
+                                    </ReactMarkdown>
+                                </div>
                             </div>
                         ))
                     ) : (
-                        <p className="text-center text-gray-500">No messages yet.</p>
+                        <p className="text-center text-gray-500">Әзірге хабарламалар жоқ.</p>
                     )}
-                    {loading && (
-                        <div className="flex items-center justify-center mb-4">
-                            <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-10 w-10"></div>
+                    {isTyping && (
+                        <div className="flex items-center justify-start mb-2">
+                            <p className="px-4 py-2 rounded-lg bg-gray-200 text-black max-w-xs break-words">
+                                Ернар жазып жатыр
+                                <span className="dot-1">.</span>
+                                <span className="dot-2">.</span>
+                                <span className="dot-3">.</span>
+                            </p>
                         </div>
                     )}
+                    <div ref={chatEndRef} />
                 </div>
                 <div className="flex space-x-2">
                     <input
                         type="text"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        placeholder="Type your message"
+                        onKeyPress={handleKeyPress}
+                        placeholder="Хабарламаңызды жазыңыз"
                         className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         disabled={loading}
                     />
                     <button
                         onClick={handleSendMessage}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
                         disabled={loading}
                     >
-                        Send
+                        Жіберу
                     </button>
                 </div>
             </div>
+            <style jsx>{`
+                .dot-1,
+                .dot-2,
+                .dot-3 {
+                    display: inline-block;
+                    opacity: 0;
+                    animation: blink 1s infinite;
+                }
+
+                .dot-2 {
+                    animation-delay: 0.2s;
+                }
+
+                .dot-3 {
+                    animation-delay: 0.4s;
+                }
+
+                @keyframes blink {
+                    0%, 20% {
+                        opacity: 0;
+                    }
+                    50% {
+                        opacity: 1;
+                    }
+                    100% {
+                        opacity: 0;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
