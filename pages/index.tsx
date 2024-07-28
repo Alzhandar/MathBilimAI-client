@@ -280,7 +280,13 @@ const Home = () => {
     );
 };
 
-const FeatureCard = ({ icon, title, description }) => (
+type FeatureCardProps = {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+};
+
+const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => (
     <div className="bg-white text-black p-6 rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition-transform duration-300 cursor-pointer">
         <div className="flex items-center gap-4 mb-4">
             {icon}
@@ -290,126 +296,116 @@ const FeatureCard = ({ icon, title, description }) => (
     </div>
 );
 
-function CheckIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M20 6 9 17l-5-5" />
-        </svg>
-    );
-}
+type IconProps = React.SVGProps<SVGSVGElement>;
 
-function FilePenIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10" />
-            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-            <path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z" />
-        </svg>
-    );
-}
+const CheckIcon: React.FC<IconProps> = (props) => (
+    <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M20 6 9 17l-5-5" />
+    </svg>
+);
 
-function LayoutTemplateIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <rect width="18" height="7" x="3" y="3" rx="1" />
-            <rect width="9" height="7" x="3" y="14" rx="1" />
-            <rect width="5" height="7" x="16" y="14" rx="1" />
-        </svg>
-    );
-}
+const FilePenIcon: React.FC<IconProps> = (props) => (
+    <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10" />
+        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+        <path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z" />
+    </svg>
+);
 
-function AiTeacherIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M12 12h0M12 18h0M12 6h0M6 12h0M18 12h0" />
-            <path d="M3 12a9 9 0 1 0 18 0A9 9 0 1 0 3 12z" />
-        </svg>
-    );
-}
+const LayoutTemplateIcon: React.FC<IconProps> = (props) => (
+    <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <rect width="18" height="7" x="3" y="3" rx="1" />
+        <rect width="9" height="7" x="3" y="14" rx="1" />
+        <rect width="5" height="7" x="16" y="14" rx="1" />
+    </svg>
+);
 
-function AnalysisIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-            <line x1="8" y1="12" x2="12" y2="16" />
-            <line x1="12" y1="12" x2="16" y2="16" />
-        </svg>
-    );
-}
+const AiTeacherIcon: React.FC<IconProps> = (props) => (
+    <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M12 12h0M12 18h0M12 6h0M6 12h0M18 12h0" />
+        <path d="M3 12a9 9 0 1 0 18 0A9 9 0 1 0 3 12z" />
+    </svg>
+);
 
-function MaterialIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M20 21H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4l2 3h4l2-3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2z" />
-            <path d="M14 13l-2-2-2 2m0 6l2-2 2 2" />
-        </svg>
-    );
-}
+const AnalysisIcon: React.FC<IconProps> = (props) => (
+    <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+        <line x1="8" y1="12" x2="12" y2="16" />
+        <line x1="12" y1="12" x2="16" y2="16" />
+    </svg>
+);
+
+const MaterialIcon: React.FC<IconProps> = (props) => (
+    <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M20 21H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4l2 3h4l2-3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2z" />
+        <path d="M14 13l-2-2-2 2m0 6l2-2 2 2" />
+    </svg>
+);
 
 export default Home;
