@@ -6,6 +6,7 @@ import 'katex/dist/katex.min.css';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import axios from 'axios';
 
 const TaskUploader = () => {
     const [image, setImage] = useState<string | null>(null);
@@ -52,7 +53,7 @@ const TaskUploader = () => {
             const blob = await (await fetch(croppedImage)).blob();
             formData.append('image', blob, 'croppedImage.png');
 
-            const { data: uploadData } = await api.post('/api/ai/upload-task', formData, {
+            const { data: uploadData } = await axios.post('https://mathbilimai-server.onrender.com/api/ai/upload-task', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

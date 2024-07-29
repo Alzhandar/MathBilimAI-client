@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../pages/api/api';
 import jsPDF from 'jspdf';
+import axios from 'axios';
 
 interface Question {
     question: string;
@@ -32,7 +33,7 @@ const Tests = () => {
     const handleGenerateTest = async () => {
         setLoading(true);
         try {
-            const res = await api.post('api/ai/generate-test', {
+            const res = await axios.post('https://mathbilimai-server.onrender.com/api/ai/generate-test', {
                 topic: subject,
                 difficulty
             }, {
