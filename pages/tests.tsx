@@ -69,7 +69,7 @@ const Tests = () => {
 
     const handleSubmitTest = async () => {
         try {
-            const res = await api.post('api/ai/submit-test', {
+            const res = await axios.post('https://mathbilimai-server.onrender.com/api/ai/submit-test', {
                 answers: selectedAnswers,
                 correctAnswers: questions.map(q => q.correctAnswer),
             }, {
