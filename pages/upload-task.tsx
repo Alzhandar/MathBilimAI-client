@@ -72,8 +72,8 @@ const TaskUploader = () => {
 
     return (
         <div className="flex flex-col min-h-screen bg-white p-4 md:p-6">
-            <div className="flex flex-1">
-                <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 p-4 border-dashed border-2 border-gray-300">
+            <div className="flex flex-col md:flex-row flex-1">
+                <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 p-4 border-dashed border-2 border-gray-300 mb-4 md:mb-0 md:mr-4">
                     <input 
                         type="file" 
                         accept="image/*" 
@@ -126,8 +126,8 @@ const TaskUploader = () => {
                         </>
                     )}
                 </div>
-                <div className="flex-1 bg-gray-50 p-4 ml-4 overflow-y-auto flex flex-col space-y-4">
-                    <div className="flex-1 bg-gray-50 p-4 rounded-lg">
+                <div className="flex-1 bg-gray-50 p-4 overflow-y-auto flex flex-col space-y-4">
+                    <div className="bg-white p-4 rounded-lg shadow-md flex-1">
                         <h3 className="text-xl font-semibold mb-2">Тақырыптар:</h3>
                         <ul className="list-disc list-inside mb-4">
                             {analysis ? analysis.topics.map((topic, index) => (
@@ -136,7 +136,7 @@ const TaskUploader = () => {
                         </ul>
                     </div>
                     <div className="border-t border-gray-200"></div>
-                    <div className="flex-1 bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-white p-4 rounded-lg shadow-md flex-1">
                         <h3 className="text-xl font-semibold mb-2">Шешім:</h3>
                         <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                             {analysis?.solution || ''}
@@ -167,9 +167,8 @@ const TaskUploader = () => {
             )}
             <style jsx>{`
                 @media (max-width: 768px) {
-                    .container {
-                        padding-left: 1rem;
-                        padding-right: 1rem;
+                    .md\\:mr-4 {
+                        margin-right: 0;
                     }
 
                     .flex-1 {
@@ -177,9 +176,16 @@ const TaskUploader = () => {
                         width: 100%;
                     }
 
-                    .ml-4 {
-                        margin-left: 0;
-                        margin-top: 2rem;
+                    .mb-4 {
+                        margin-bottom: 1rem;
+                    }
+
+                    .md\\:mb-0 {
+                        margin-bottom: 0;
+                    }
+
+                    .md\\:flex-row {
+                        flex-direction: column;
                     }
                 }
             `}</style>
