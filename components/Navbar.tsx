@@ -46,6 +46,55 @@ const Navbar = () => {
                         </svg>
                     </button>
                 </div>
+                <div className="hidden md:flex md:items-center md:space-x-6">
+                    <ul className="flex flex-row md:space-x-4 space-y-4 md:space-y-0 mt-4 md:mt-0">
+                        {user ? (
+                            <>
+                                <li>
+                                    <Link href="/dashboard" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Басты бет</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/chat" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Чат</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/tests" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Тесттер</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/materials" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Материалдар</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/upload-task" legacyBehavior>
+                                        <a className="text-black hover:text-blue-600 transition duration-300 hover:border-b-2 hover:border-blue-600">Тапсырма жүктеу</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <button onClick={handleLogout} className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-300 w-full md:w-auto">Шығу</button>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li>
+                                    <Link href="/login" legacyBehavior>
+                                        <a className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-300 w-full md:w-auto">Кіру</a>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href="/register" legacyBehavior>
+                                        <a className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-300 w-full md:w-auto">Тіркелу</a>
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                    </ul>
+                </div>
             </div>
             <div className={`fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={closeMenu}></div>
             <div className={`fixed inset-y-0 right-0 w-64 bg-white shadow-md z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
@@ -83,7 +132,7 @@ const Navbar = () => {
                                 </Link>
                             </li>
                             <li>
-                                <button onClick={handleLogout} className="w-full text-left text-black hover:text-blue-600 transition duration-300">Шығу</button>
+                                <button onClick={handleLogout} className="block w-full text-left text-black hover:text-blue-600 transition duration-300">Шығу</button>
                             </li>
                         </>
                     ) : (
