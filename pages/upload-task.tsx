@@ -60,7 +60,7 @@ const TaskUploader = () => {
             });
 
             const { text } = uploadData;
-            const { data: analysisData } = await api.post('/api/ai/analyze-task', { text });
+            const { data: analysisData } = await axios.post('https://mathbilimai-server.onrender.com/api/ai/analyze-task', { text });
 
             setAnalysis(analysisData.analysis);
         } catch (error) {
