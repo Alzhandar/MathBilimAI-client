@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import Link from "next/link";
 import Img from "./images/Social-Math_2880x1700_Lede.jpg";
-
+import EmilImage from "./images/photo_2024-08-02 19.36.29.jpeg";
+import DauletImage from "./images/photo_2024-08-02 19.36.32.jpeg";
+import NurbekImage from "./images/photo_2024-08-02 19.36.27.jpeg";
+import ErkebulanImage from "./images/photo_2024-08-02 19.36.35.jpeg";
 const Home = () => {
     const { user } = useAuth();
     const router = useRouter();
@@ -16,6 +19,57 @@ const Home = () => {
         }
     };
 
+    const testimonials = [
+        {
+            text: "MathBilimAI маған ЕНТ-ға дайындалуға көп көмектесті. Әсіресе ИИ оқытушының ұсыныстары пайдалы болды.",
+            author: "Эмиль",
+            role: "Оқушы",
+            image: EmilImage
+        },
+        {
+            text: "Менің балама MathBilimAI платформасы өте ұнады. Ол енді математикаға деген қызығушылығын арттырды.",
+            author: "Даулет",
+            role: "Оқушы",
+            image: DauletImage
+        },
+        {
+            text: "Платформа өте ыңғайлы және пайдалы. Менің нәтижелерім бірден жақсарды.",
+            author: "Нурбек",
+            role: "Оқушы",
+            image: NurbekImage
+        },
+        {
+            text: "MathBilimAI платформада оқудың көптеген жолдарын ұсынады. Бұл менің оқуымды жақсартты.",
+            author: "Еркебулан",
+            role: "Оқушы",
+            image: ErkebulanImage
+        }
+    ];
+
+    const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentTestimonialIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+        }, 5000); // смена отзывов каждые 5 секунд
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const handleSwipeStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        // Начало свайпа
+    };
+
+    const handleSwipeMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        // Движение свайпа
+    };
+
+    const handleSwipeEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+        // Завершение свайпа
+    };
+
+    const currentTestimonial = testimonials[currentTestimonialIndex];
+
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
             <main className="flex-1">
@@ -24,10 +78,10 @@ const Home = () => {
                         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:gap-12">
                             <div className="flex flex-col justify-center">
                                 <h1 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl lg:text-6xl">
-                                    MathTeachAI-ға қош келдіңіз
+                                    MathBilimAI-ға қош келдіңіз
                                 </h1>
                                 <p className="mt-4 max-w-[600px] text-gray-700 md:text-xl lg:text-lg">
-                                    MathTeachAI сізге ЕНТ-ға дайындалуға көмектесетін онлайн платформа. Біз сіздің әлсіз тұстарыңызды анықтап, қажетті материалдарды ұсынатын ИИ-оқытушыны ұсынамыз.
+                                    MathBilimAI сізге ЕНТ-ға дайындалуға көмектесетін онлайн платформа. Біз сіздің әлсіз тұстарыңызды анықтап, қажетті материалдарды ұсынатын ИИ-оқытушыны ұсынамыз.
                                 </p>
                                 <div className="mt-6">
                                     <button
@@ -56,26 +110,11 @@ const Home = () => {
                             <div className="space-y-2">
                                 <h2 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl">Негізгі мүмкіндіктер</h2>
                                 <p className="max-w-[700px] text-gray-700 md:text-xl lg:text-lg">
-                                    MathTeachAI платформасы сізге тесттерді оңай жасауға, тапсырмаларды автоматты түрде бағалауға және білім алу үшін қажетті материалдарды ұсынуға көмектеседі.
+                                    MathBilimAI платформасы сізге тесттерді оңай жасауға, тапсырмаларды автоматты түрде бағалауға және білім алу үшін қажетті материалдарды ұсынуға көмектеседі.
                                 </p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:gap-8">
-                            <FeatureCard 
-                                icon={<FilePenIcon className="h-8 w-8 text-blue-600" />}
-                                title="Тест жасау оңайлығы"
-                                description="Интуитивті интерфейс бірнеше сұрақ түрлерімен тесттерді оңай жасауға мүмкіндік береді."
-                            />
-                            <FeatureCard 
-                                icon={<LayoutTemplateIcon className="h-8 w-8 text-blue-600" />}
-                                title="Баптауға болатын шаблондар"
-                                description="Икемді шаблондарымызбен тесттеріңіздің көрінісін және сезімін дербестеңіз."
-                            />
-                            <FeatureCard 
-                                icon={<CheckIcon className="h-8 w-8 text-blue-600" />}
-                                title="Автоматты бағалау"
-                                description="Тесттерді бірден бағалайтын автоматты бағалау функциясымен уақытыңызды үнемдеңіз."
-                            />
                             <FeatureCard 
                                 icon={<AiTeacherIcon className="h-8 w-8 text-blue-600" />}
                                 title="ИИ оқытушы"
@@ -100,7 +139,7 @@ const Home = () => {
                             <div className="space-y-2">
                                 <h2 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl">Қалай жұмыс істейді</h2>
                                 <p className="max-w-[700px] text-gray-700 md:text-xl lg:text-lg">
-                                    MathTeachAI сізге өзіңізді тексеруге және әлсіз жақтарыңызды жақсартуға көмектеседі. Біздің ИИ-оқытушы сізге дұрыс жолды көрсетеді.
+                                    MathBilimAI сізге өзіңізді тексеруге және әлсіз жақтарыңызды жақсартуға көмектеседі. Біздің ИИ-оқытушы сізге дұрыс жолды көрсетеді.
                                 </p>
                             </div>
                         </div>
@@ -136,55 +175,6 @@ const Home = () => {
                         </div>
                     </div>
                 </section>
-                <section className="bg-gray-100 w-full py-12 md:py-24">
-                    <div className="container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12">
-                        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                            <div className="space-y-2">
-                                <h2 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl">Жол картасы</h2>
-                                <p className="max-w-[700px] text-gray-700 md:text-xl lg:text-lg">
-                                    MathTeachAI-дың болашақ жоспарларын қарап шығыңыз.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="relative">
-                            <div className="absolute h-full border border-blue-600 left-1/2 transform -translate-x-1/2"></div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div className="flex flex-col items-center text-center relative">
-                                    <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mb-4">
-                                        <span className="text-2xl font-bold">Q1</span>
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-blue-600 mb-2">Бастау</h3>
-                                    <p className="text-gray-700">Платформаны іске қосу және алғашқы пайдаланушыларды жинау.</p>
-                                    <div className="absolute bg-blue-600 w-4 h-4 rounded-full left-1/2 transform -translate-x-1/2 -bottom-2"></div>
-                                </div>
-                                <div className="flex flex-col items-center text-center relative">
-                                    <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mb-4">
-                                        <span className="text-2xl font-bold">Q2</span>
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-blue-600 mb-2">Кеңейту</h3>
-                                    <p className="text-gray-700">Жаңа пәндер мен функцияларды қосу, қолданушылар санын көбейту.</p>
-                                    <div className="absolute bg-blue-600 w-4 h-4 rounded-full left-1/2 transform -translate-x-1/2 -bottom-2"></div>
-                                </div>
-                                <div className="flex flex-col items-center text-center relative">
-                                    <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mb-4">
-                                        <span className="text-2xl font-bold">Q3</span>
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-blue-600 mb-2">Серіктестік</h3>
-                                    <p className="text-gray-700">Білім беру ұйымдарымен серіктестік орнату.</p>
-                                    <div className="absolute bg-blue-600 w-4 h-4 rounded-full left-1/2 transform -translate-x-1/2 -bottom-2"></div>
-                                </div>
-                                <div className="flex flex-col items-center text-center relative">
-                                    <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mb-4">
-                                        <span className="text-2xl font-bold">Q4</span>
-                                    </div>
-                                    <h3 className="text-xl font-semibold text-blue-600 mb-2">Глобалды өсу</h3>
-                                    <p className="text-gray-700">Платформаны халықаралық деңгейде кеңейту.</p>
-                                    <div className="absolute bg-blue-600 w-4 h-4 rounded-full left-1/2 transform -translate-x-1/2 -bottom-2"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
                 <section className="bg-white w-full py-12 md:py-24">
                     <div className="container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12">
                         <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -195,87 +185,132 @@ const Home = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-                                <p className="text-gray-800">"MathTeachAI маған ЕНТ-ға дайындалуға көп көмектесті. Әсіресе ИИ оқытушының ұсыныстары пайдалы болды."</p>
-                                <div className="flex items-center mt-4">
-                                    <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">A</div>
-                                    <div className="ml-4">
-                                        <p className="text-gray-800 font-semibold">Айдана</p>
-                                        <p className="text-gray-600">Оқушы</p>
+                        <div className="relative overflow-hidden">
+                            <div
+                                className="flex transition-transform ease-in-out duration-500"
+                                style={{ transform: `translateX(-${currentTestimonialIndex * 100}%)` }}
+                                onTouchStart={handleSwipeStart}
+                                onTouchMove={handleSwipeMove}
+                                onTouchEnd={handleSwipeEnd}
+                            >
+                                  {testimonials.map((testimonial, index) => (
+                                    <div key={index} className="min-w-full flex-shrink-0 p-6 text-center space-y-4">
+                                        <div className="flex justify-center">
+                                            <img src={testimonial.image.src} alt={testimonial.author} className="w-20 h-21 rounded-full object-cover" />
+                                        </div>
+                                        <p className="text-gray-800">{testimonial.text}</p>
+                                        <div className="text-center">
+                                            <p className="text-gray-800 font-semibold">{testimonial.author}</p>
+                                            <p className="text-gray-600">{testimonial.role}</p>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
-                            <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-                                <p className="text-gray-800">"Менің балама MathTeachAI платформасы өте ұнады. Ол енді математикаға деген қызығушылығын арттырды."</p>
-                                <div className="flex items-center mt-4">
-                                    <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">B</div>
-                                    <div className="ml-4">
-                                        <p className="text-gray-800 font-semibold">Бауыржан</p>
-                                        <p className="text-gray-600">Ата-ана</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="bg-gray-100 p-6 rounded-lg shadow-md">
-                                <p className="text-gray-800">"Платформа өте ыңғайлы және пайдалы. Менің нәтижелерім бірден жақсарды."</p>
-                                <div className="flex items-center mt-4">
-                                    <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">C</div>
-                                    <div className="ml-4">
-                                        <p className="text-gray-800 font-semibold">Саида</p>
-                                        <p className="text-gray-600">Оқушы</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section className="bg-gray-100 w-full py-12 md:py-24">
-                    <div className="container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12">
-                        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                            <div className="space-y-2">
-                                <h2 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl">Бізбен байланысыңыз</h2>
-                                <p className="max-w-[700px] text-gray-700 md:text-xl lg:text-lg">
-                                    Әлеуметтік желілер арқылы бізбен байланысыңыз.
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex justify-center space-x-6">
-                            <Link href="https://www.instagram.com" legacyBehavior>
-                                <a target="_blank" className="text-blue-600 hover:text-blue-800">
-                                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 2.2.3 3 .7.8.4 1.5 1 2 2 .4.8.6 1.8.7 3 .1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.3 2.2-.7 3-.4.8-1 1.5-2 2-.8.4-1.8.6-3 .7-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-2.2-.3-3-.7-.8-.4-1.5-1-2-2-.4-.8-.6-1.8-.7-3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.3-2.2.7-3 .4-.8 1-1.5 2-2 .8-.4 1.8-.6 3-.7 1.2-.1 1.6-.1 4.8-.1zm0-2.2c-3.2 0-3.7 0-4.9.1-1.3.1-2.3.3-3.2.7-.9.4-1.7.9-2.5 1.7-.7.7-1.3 1.6-1.7 2.5-.4.9-.6 1.9-.7 3.2-.1 1.2-.1 1.7-.1 4.9s0 3.7.1 4.9c.1 1.3.3 2.3.7 3.2.4.9.9 1.7 1.7 2.5.7.7 1.6 1.3 2.5 1.7.9.4 1.9.6 3.2.7 1.2.1 1.7.1 4.9.1s3.7 0 4.9-.1c1.3-.1 2.3-.3 3.2-.7.9-.4 1.7-.9 2.5-1.7.7-.7 1.3-1.6 1.7-2.5.4-.9.6-1.9.7-3.2.1-1.2.1-1.7.1-4.9s0-3.7-.1-4.9c-.1-1.3-.3-2.3-.7-3.2-.4-.9-.9-1.7-1.7-2.5-.7-.7-1.6-1.3-2.5-1.7-.9-.4-1.9-.6-3.2-.7-1.2-.1-1.7-.1-4.9-.1zm0 5.9a6.1 6.1 0 100 12.2 6.1 6.1 0 000-12.2zm0 10a3.9 3.9 0 110-7.8 3.9 3.9 0 010 7.8zm6.4-10.8c0 .8-.7 1.4-1.4 1.4-.8 0-1.4-.7-1.4-1.4 0-.8.7-1.4 1.4-1.4.8 0 1.4.7 1.4 1.4z"/>
-                                    </svg>
-                                </a>
-                            </Link>
-                            <Link href="https://www.whatsapp.com" legacyBehavior>
-                                <a target="_blank" className="text-blue-600 hover:text-blue-800">
-                                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12.2 2.2a10 10 0 100 19.7h.1c.7 0 1.5-.1 2.3-.3 1-.3 1.8-.8 2.7-1.4l1.5.4c.6.2 1.1.4 1.6.5s.9.1 1.2-.1c.3-.2.6-.5.7-1.1.1-.3.1-.5.1-.8v-.5c0-.1 0-.2-.1-.2s-.1-.1-.2-.1l-2.2-.7a5.7 5.7 0 01-1.8-1.2c-.5-.4-.9-.8-1.3-1.3-.2-.3-.4-.5-.6-.7-.2-.2-.5-.3-.8-.3s-.5.1-.7.3l-.9.9c-.1.1-.2.2-.4.3-.1.1-.3.1-.4.1a3 3 0 01-1.4-.6 11.6 11.6 0 01-2.8-3 7 7 0 01-.7-1.4c-.1-.3-.2-.6 0-.8.1-.2.3-.4.4-.5.3-.3.5-.7.8-1s.4-.6.6-.9.2-.6.1-.9c0-.3 0-.5-.2-.7-.2-.2-.5-.4-.7-.6l-.5-.4c-.2-.1-.5-.2-.7-.3-.3-.1-.6-.1-.9 0s-.7.3-1 .5l-.5.3c-.3.1-.5.3-.8.5a4 4 0 00-.8 1.4c-.3.9-.4 1.7-.3 2.5.1.9.4 1.8.7 2.6.3.9.8 1.8 1.4 2.6 1.6 2.2 3.6 4.1 6 5.4a11.4 11.4 0 002.9 1c.6.1 1.3.2 1.9.2.8 0 1.7-.1 2.6-.3.9-.2 1.7-.7 2.5-1.2.8-.5 1.5-1.2 2.1-1.9.6-.7 1.1-1.5 1.5-2.4.4-.9.7-1.8.9-2.8.2-.9.2-1.8.1-2.8-.1-1-.3-1.9-.7-2.8a10.3 10.3 0 00-3.7-4.5A10.2 10.2 0 0012.2 2.2zm.8 18.4h-.1a8.2 8.2 0 01-4.6-1.4 9.2 9.2 0 01-3.2-4.1 8.7 8.7 0 01-.6-2.9 8.3 8.3 0 011.2-4.4c.7-1 1.7-1.8 2.8-2.4a7.9 7.9 0 014.6-1c1.6.1 3.1.7 4.4 1.7a8.4 8.4 0 012.7 3.4c.3.8.5 1.6.6 2.4.1 1.4-.1 2.8-.7 4a7.7 7.7 0 01-2.5 3c-.7.5-1.4.8-2.2 1 .5.7 1.1 1.3 1.7 1.7.5.4 1.1.8 1.7 1.2l.1.1h-.1c-.5-.1-1-.2-1.6-.4l-2-.5c-.7.4-1.5.7-2.3 1z"/>
-                                    </svg>
-                                </a>
-                            </Link>
-                            <Link href="https://telegram.org" legacyBehavior>
-                                <a target="_blank" className="text-blue-600 hover:text-blue-800">
-                                    <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm3.6 7.8l-1.4 6.8c-.1.4-.3.6-.7.6h-.1c-.3 0-.5-.1-.8-.3l-2.4-1.8-1.1 1.1c-.1.1-.3.2-.4.3-.2.1-.3.1-.5.1h-.3c-.2 0-.3-.1-.4-.3-.2-.2-.2-.4-.2-.6v-3.2c0-.5.3-.9.6-1l5.4-4.6c.2-.2.5-.2.8-.2.2.1.5.2.7.3.2.2.3.4.3.7zm-6.3 3.6v1.8l.9-.9.8-.7-1.7 1.4zm4.5 2.4l1.1-5.3-4 3.4 2.9 1.9z"/>
-                                    </svg>
-                                </a>
-                            </Link>
                         </div>
                     </div>
                 </section>
             </main>
-            <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full items-center px-4 md:px-6 border-t bg-white">
-                <p className="text-xs text-gray-500">&copy; 2024 MathTeachAI. Барлық құқықтар қорғалған.</p>
-                <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-                    <Link href="#" className="text-xs text-blue-600 hover:underline underline-offset-4" prefetch={false}>
-                        Қызмет көрсету шарттары
-                    </Link>
-                    <Link href="#" className="text-xs text-blue-600 hover:underline underline-offset-4" prefetch={false}>
-                        Құпиялылық
-                    </Link>
-                </nav>
+            <footer className="relative bg-blue-600 text-white py-4 mt-12 overflow-hidden rounded-t-2xl">
+                <div className="absolute inset-0">
+                    <div className="flex flex-wrap justify-center items-center w-full h-full opacity-10">
+                        <span className="text-4xl mx-2">a² + b² = c²</span>
+                        <span className="text-4xl mx-2">∫f(x)dx</span>
+                        <span className="text-4xl mx-2">i² = -1</span>
+                        <span className="text-4xl mx-2">π ≈ 3.14159</span>
+                    </div>
+                </div>
+                <div className="container mx-auto px-4 md:px-6 relative z-10">
+                    <div className="flex flex-wrap justify-between items-center">
+                        <div className="w-full sm:w-auto text-center sm:text-left">
+                            <h3 className="text-2xl font-bold">MathBilimAI</h3>
+                            <p className="text-sm mt-2">&copy; 2024 MathBilimAI. Барлық құқықтар қорғалған.</p>
+                        </div>
+                        <div className="w-full sm:w-auto mt-4 sm:mt-0 text-center sm:text-right">
+                            <nav className="flex flex-wrap justify-center sm:justify-end gap-4">
+                                <Link href="#" legacyBehavior>
+                                    <a className="text-white hover:underline">Қызмет көрсету шарттары</a>
+                                </Link>
+                                <Link href="#" legacyBehavior>
+                                    <a className="text-white hover:underline">Құпиялылық</a>
+                                </Link>
+                            </nav>
+                            <div className="flex justify-center sm:justify-end gap-4 mt-4">
+                                <Link href="https://www.facebook.com" legacyBehavior>
+                                    <a className="text-white hover:text-blue-400" aria-label="Facebook">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                            <path d="M22 0H2C.895 0 0 .895 0 2v20c0 1.105.895 2 2 2h10.68v-8.708H9.897v-3.394h2.783V9.57c0-2.754 1.665-4.25 4.095-4.25 1.164 0 2.165.087 2.457.126v2.85h-1.684c-1.322 0-1.577.629-1.577 1.551v2.035h3.154l-.411 3.394h-2.743V24H22c1.105 0 2-.895 2-2V2c0-1.105-.895-2-2-2z"/>
+                                        </svg>
+                                    </a>
+                                </Link>
+                                <Link href="https://www.twitter.com" legacyBehavior>
+                                    <a className="text-white hover:text-blue-400" aria-label="Twitter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                            <path d="M24 4.557a9.838 9.838 0 01-2.828.775 4.933 4.933 0 002.165-2.723 9.865 9.865 0 01-3.127 1.197A4.92 4.92 0 0016.616 3c-2.717 0-4.92 2.204-4.92 4.92 0 .386.044.762.127 1.122-4.088-.205-7.715-2.163-10.141-5.142a4.905 4.905 0 00-.666 2.473 4.92 4.92 0 002.19 4.096 4.904 4.904 0 01-2.228-.616v.062c0 2.39 1.701 4.384 3.955 4.833a4.942 4.942 0 01-2.224.084c.628 1.956 2.445 3.377 4.6 3.418a9.865 9.865 0 01-6.1 2.102c-.396 0-.787-.023-1.175-.069a13.9 13.9 0 007.548 2.212c9.057 0 14.01-7.502 14.01-14.009 0-.213-.004-.426-.014-.637A10.01 10.01 0 0024 4.557z"/>
+                                        </svg>
+                                    </a>
+                                </Link>
+                                <Link href="https://www.instagram.com" legacyBehavior>
+                                    <a className="text-white hover:text-pink-600" aria-label="Instagram">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                                            <path d="M12 2.163c3.204 0 3.584.012 4.849.07 1.366.062 2.633.333 3.608 1.309.976.975 1.247 2.242 1.309 3.608.058 1.265.07 1.645.07 4.849 0 3.204-.012 3.584-.07 4.849-.062 1.366-.333 2.633-1.309 3.608-.975.976-2.242 1.247-3.608 1.309-1.265.058-1.645.07-4.849.07-3.204 0-3.584-.012-4.849-.07-1.366-.062-2.633-.333-3.608-1.309-.976-.975-1.247-2.242-1.309-3.608-.058-1.265-.07-1.645-.07-4.849 0-3.204.012-3.584.07-4.849.062-1.366.333-2.633 1.309-3.608.975-.976 2.242-1.247 3.608-1.309 1.265-.058 1.645-.07 4.849-.07m0-2.163c-3.259 0-3.67.013-4.947.072-1.425.065-2.88.385-3.913 1.418-1.033 1.033-1.353 2.487-1.418 3.913-.059 1.277-.072 1.688-.072 4.947s.013 3.67.072 4.947c.065 1.425.385 2.88 1.418 3.913 1.033 1.033 2.487 1.353 3.913 1.418 1.277.059 1.688.072 4.947.072s3.67-.013 4.947-.072c1.425-.065 2.88-.385 3.913-1.418 1.033-1.033 1.353-2.487 1.418-3.913.059-1.277.072-1.688.072-4.947s-.013-3.67-.072-4.947c-.065-1.425-.385-2.88-1.418-3.913-1.033-1.033-2.487-1.353-3.913-1.418-1.277-.059-1.688-.072-4.947-.072zM12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a3.999 3.999 0 110-7.998 3.999 3.999 0 010 7.998zm6.406-11.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                                        </svg>
+                                    </a>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <svg className="w-full" viewBox="0 0 1440 320">
+                    <path fill="#1E3A8A" fillOpacity="1" d="M0,224L30,213.3C60,203,120,181,180,170.7C240,160,300,160,360,176C420,192,480,224,540,213.3C600,203,660,149,720,117.3C780,85,840,75,900,74.7C960,75,1020,85,1080,106.7C1140,128,1200,160,1260,149.3C1320,139,1380,85,1410,58.7L1440,32L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path>
+                </svg>
             </footer>
+            <style jsx>{`
+                @keyframes typing {
+                    from { width: 0; }
+                    to { width: 100%; }
+                }
+
+                @keyframes blink {
+                    50% { border-color: transparent; }
+                }
+
+                .typewriter {
+                    font-family: 'Titillium Web', sans-serif;
+                    font-size: 2rem;
+                    color: #2663EB;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    border-right: 3px solid #2663EB;
+                    animation: typing 4s steps(40, end), blink 0.75s step-end infinite;
+                }
+
+                @media (max-width: 768px) {
+                    .typewriter {
+                        font-size: 1.25rem;
+                    }
+
+                    .text-lg {
+                        font-size: 1rem;
+                    }
+
+                    .text-2xl {
+                        font-size: 1.25rem;
+                    }
+
+                    .text-3xl {
+                        font-size: 1.75rem;
+                    }
+
+                    .text-4xl {
+                        font-size: 2rem;
+                    }
+
+                    .container {
+                        padding-left: 1rem;
+                        padding-right: 1rem;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
@@ -297,61 +332,6 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
 );
 
 type IconProps = React.SVGProps<SVGSVGElement>;
-
-const CheckIcon: React.FC<IconProps> = (props) => (
-    <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-    >
-        <path d="M20 6 9 17l-5-5" />
-    </svg>
-);
-
-const FilePenIcon: React.FC<IconProps> = (props) => (
-    <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-    >
-        <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10" />
-        <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-        <path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z" />
-    </svg>
-);
-
-const LayoutTemplateIcon: React.FC<IconProps> = (props) => (
-    <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-    >
-        <rect width="18" height="7" x="3" y="3" rx="1" />
-        <rect width="9" height="7" x="3" y="14" rx="1" />
-        <rect width="5" height="7" x="16" y="14" rx="1" />
-    </svg>
-);
 
 const AiTeacherIcon: React.FC<IconProps> = (props) => (
     <svg

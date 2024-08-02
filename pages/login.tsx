@@ -8,17 +8,25 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [message, setMessage] = useState('');
     const { login } = useAuth();
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
+        setMessage('');
         try {
             await login(email, password);
-            router.push('/');
+            setMessage('Вы успешно зашли!');
+            setTimeout(() => {
+                router.push('/dashboard');
+            }, 2000);
         } catch (error) {
-            console.error(error);
+            setMessage('Ошибка: пользователя не существует.');
+            setTimeout(() => {
+                setMessage('');
+            }, 2000);
         } finally {
             setIsLoading(false);
         }
@@ -27,7 +35,7 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-                <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">MathTeachAI-ға кіру</h1>
+                <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Кіру</h1>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label className="block text-gray-700 font-semibold mb-2">Email</label>
@@ -56,11 +64,11 @@ const Login = () => {
                             >
                                 {isPasswordVisible ? (
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 2a8 8 0 00-7.446 4.032A8.003 8.003 0 0110 4a8.003 8.003 0 017.446 2.032A8 8 0 0010 2zM4.93 6.032a6 6 0 1110.14 0A8.003 8.003 0 0010 6a8.003 8.003 0 00-5.07 2.032zM10 12a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6z" />
+                                        <path d="M10 2C5.589 2 1.582 4.48 0 8c1.582 3.52 5.589 6 10 6s8.418-2.48 10-6c-1.582-3.52-5.589-6-10-6zm0 10a4 4 0 110-8 4 4 0 010 8zm0-6a2 2 0 100 4 2 2 0 000-4z" />
                                     </svg>
                                 ) : (
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M10 4a8 8 0 00-7.446 4.032A8.003 8.003 0 0110 6a8.003 8.003 0 017.446 2.032A8 8 0 0010 4zM4.93 8.032A6 6 0 1015.07 8.032A8.003 8.003 0 0010 6a8.003 8.003 0 00-5.07 2.032zM10 16a6 6 0 016 6v1H4v-1a6 6 0 016-6z" />
+                                        <path d="M10 2C5.589 2 1.582 4.48 0 8c1.582 3.52 5.589 6 10 6s8.418-2.48 10-6c-1.582-3.52-5.589-6-10-6zM2.213 6.213C4.266 4.16 7.037 3 10 3s5.734 1.16 7.787 3.213L16.174 9H3.826L2.213 6.213zM10 11a4 4 0 100-8 4 4 0 000 8z" />
                                     </svg>
                                 )}
                             </button>
@@ -82,8 +90,15 @@ const Login = () => {
                     </button>
                 </form>
                 <div className="text-center mt-4">
-                    <Link href="/register" className="text-blue-500 hover:underline">Аккаунтыңыз жоқ па? Тіркелу</Link>
+                    <Link href="/register" legacyBehavior>
+                        <a className="text-blue-500 hover:underline">Аккаунтыңыз жоқ па? Тіркелу</a>
+                    </Link>
                 </div>
+                {message && (
+                    <div className="mt-4 text-center">
+                        <p className="text-sm text-gray-600">{message}</p>
+                    </div>
+                )}
             </div>
         </div>
     );

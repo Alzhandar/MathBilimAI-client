@@ -33,7 +33,7 @@ const Navbar = () => {
                         className="text-black font-bold text-2xl hover:text-blue-600 transition duration-300 cursor-pointer"
                         onClick={handleLogoClick}
                     >
-                        MathTeachAI
+                        MathBilimAI
                     </span>
                 </div>
                 <div className="block md:hidden">

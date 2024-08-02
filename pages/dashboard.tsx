@@ -105,22 +105,21 @@ const Dashboard = () => {
                     </div>
                 </section>
             </main>
-            <footer className="relative bg-blue-600 text-white py-8 mt-12 overflow-hidden">
+            <footer className="relative bg-blue-600 text-white py-4 mt-12 overflow-hidden rounded-t-2xl">
                 <div className="absolute inset-0">
                     <div className="flex flex-wrap justify-center items-center w-full h-full opacity-10">
-                        <span className="text-9xl mx-4">+</span>
-                        <span className="text-9xl mx-4">=</span>
-                        <span className="text-9xl mx-4">π</span>
-                        <span className="text-9xl mx-4">√</span>
-                        <span className="text-9xl mx-4">Σ</span>
-                        <span className="text-9xl mx-4">∞</span>
+
+                        <span className="text-4xl mx-2">a² + b² = c²</span>
+                        <span className="text-4xl mx-2">∫f(x)dx</span>
+                        <span className="text-4xl mx-2">i² = -1</span>
+                        <span className="text-4xl mx-2">π ≈ 3.14159</span>
                     </div>
                 </div>
                 <div className="container mx-auto px-4 md:px-6 relative z-10">
                     <div className="flex flex-wrap justify-between items-center">
                         <div className="w-full sm:w-auto text-center sm:text-left">
-                            <h3 className="text-2xl font-bold">MathTeachAI</h3>
-                            <p className="text-sm mt-2">&copy; 2024 MathTeachAI. Барлық құқықтар қорғалған.</p>
+                            <h3 className="text-2xl font-bold">MathBilimAI</h3>
+                            <p className="text-sm mt-2">&copy; 2024 MathBilimAI. Барлық құқықтар қорғалған.</p>
                         </div>
                         <div className="w-full sm:w-auto mt-4 sm:mt-0 text-center sm:text-right">
                             <nav className="flex flex-wrap justify-center sm:justify-end gap-4">
