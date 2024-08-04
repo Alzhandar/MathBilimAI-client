@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import api from '../api/api';
+import axios from 'axios';
 
 interface Material {
     _id: string;
@@ -18,7 +19,7 @@ const CategoryMaterials = () => {
             const fetchMaterials = async () => {
                 try {
                     const decodedCategory = decodeURIComponent(category as string);
-                    const response = await api.get(`/api/materials/category/${decodedCategory}`);
+                    const response = await axios.get(`https://mathbilimai-server.onrender.com/api/materials/category/${decodedCategory}`);
                     setMaterials(response.data);
                 } catch (error) {
                     console.error('Error fetching materials:', error);

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import api from '../../api/api';
 import 'katex/dist/katex.min.css';
 import { BlockMath } from 'react-katex';
+import axios from 'axios';
 
 interface Exercise {
     level: string;
@@ -34,7 +35,7 @@ const MaterialDetail = () => {
         if (category && id) {
             const fetchMaterial = async () => {
                 try {
-                    const response = await api.get(`/api/materials/${id}`);
+                    const response = await axios.get(`https://mathbilimai-server.onrender.com/api/materials/${id}`);
                     setMaterial(response.data);
                 } catch (error) {
                     console.error('Error fetching material:', error);
@@ -48,7 +49,7 @@ const MaterialDetail = () => {
     const handleSubmit = async () => {
         if (selectedExercise) {
             try {
-                const response = await api.post('/api/ai/check-answer', {
+                const response = await axios.post('https://mathbilimai-server.onrender.com/api/ai/check-answer', {
                     question: selectedExercise.question,
                     userAnswer
                 });

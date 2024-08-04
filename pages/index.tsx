@@ -7,6 +7,7 @@ import EmilImage from "./images/photo_2024-08-02 19.36.29.jpeg";
 import DauletImage from "./images/photo_2024-08-02 19.36.32.jpeg";
 import NurbekImage from "./images/photo_2024-08-02 19.36.27.jpeg";
 import ErkebulanImage from "./images/photo_2024-08-02 19.36.35.jpeg";
+
 const Home = () => {
     const { user } = useAuth();
     const router = useRouter();
@@ -193,10 +194,10 @@ const Home = () => {
                                 onTouchMove={handleSwipeMove}
                                 onTouchEnd={handleSwipeEnd}
                             >
-                                  {testimonials.map((testimonial, index) => (
+                                {testimonials.map((testimonial, index) => (
                                     <div key={index} className="min-w-full flex-shrink-0 p-6 text-center space-y-4">
-                                        <div className="flex justify-center">
-                                            <img src={testimonial.image.src} alt={testimonial.author} className="w-20 h-21 rounded-full object-cover" />
+                                        <div className="flex justify-center mb-4">
+                                            <img src={testimonial.image.src} alt={testimonial.author} className="w-24 h-24 rounded-full object-cover" />
                                         </div>
                                         <p className="text-gray-800">{testimonial.text}</p>
                                         <div className="text-center">

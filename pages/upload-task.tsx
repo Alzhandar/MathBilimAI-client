@@ -2,10 +2,7 @@ import React, { useState, useRef } from 'react';
 import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import api from '../pages/api/api';
-import 'katex/dist/katex.min.css';
-import ReactMarkdown from 'react-markdown';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+import MathJaxComponent from '../components/MathJaxComponent';
 import axios from 'axios';
 
 const TaskUploader = () => {
@@ -138,9 +135,11 @@ const TaskUploader = () => {
                     <div className="border-t border-gray-200"></div>
                     <div className="bg-white p-4 rounded-lg shadow-md flex-1">
                         <h3 className="text-xl font-semibold mb-2">Шешім:</h3>
-                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-                            {analysis?.solution || ''}
-                        </ReactMarkdown>
+                        {analysis && (
+                            <MathJaxComponent>
+                                {analysis.solution}
+                            </MathJaxComponent>
+                        )}
                     </div>
                 </div>
             </div>
@@ -165,30 +164,6 @@ const TaskUploader = () => {
                     </svg>
                 </div>
             )}
-            <style jsx>{`
-                @media (max-width: 768px) {
-                    .md\\:mr-4 {
-                        margin-right: 0;
-                    }
-
-                    .flex-1 {
-                        flex: none;
-                        width: 100%;
-                    }
-
-                    .mb-4 {
-                        margin-bottom: 1rem;
-                    }
-
-                    .md\\:mb-0 {
-                        margin-bottom: 0;
-                    }
-
-                    .md\\:flex-row {
-                        flex-direction: column;
-                    }
-                }
-            `}</style>
         </div>
     );
 };

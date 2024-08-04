@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import api from '../pages/api/api';
-import jsPDF from 'jspdf';
 import axios from 'axios';
+import MathJaxComponent from '../components/MathJaxComponent';
+import { useRouter } from 'next/router';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import Select from 'react-select';
+import 'animate.css';
 
 interface Question {
+    _id: string;
     question: string;
     options: string[];
     correctAnswer: string;
+}
+
+interface DetailedResult {
+    questionIndex: number;
+    isCorrect: boolean;
+    correctAnswer: string;
+    givenAnswer: string;
 }
 
 const SkeletonLoader = () => (
@@ -27,24 +39,32 @@ const Tests = () => {
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [score, setScore] = useState<number | null>(null);
     const [recommendations, setRecommendations] = useState<string[]>([]);
+    const [detailedResults, setDetailedResults] = useState<DetailedResult[]>([]);
+    const [topics, setTopics] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [courseMaterials, setCourseMaterials] = useState<string[]>([]);
+    const [courseCreated, setCourseCreated] = useState<boolean>(false);
+    const [createdTopic, setCreatedTopic] = useState<string | null>(null);
     const { user } = useAuth();
+    const router = useRouter();
 
     const handleGenerateTest = async () => {
         setLoading(true);
         try {
-            const res = await axios.post('https://mathbilimai-server.onrender.com/api/ai/generate-test', {
-                topic: subject,
-                difficulty
-            }, {
+            const res = await axios.get('http://localhost:5003/api/questions/random', {
+                params: {
+                    difficulty,
+                    count: 20
+                },
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-            setQuestions(res.data.testContent);
-            setSelectedAnswers(new Array(res.data.testContent.length).fill(''));
+            setQuestions(res.data);
+            setSelectedAnswers(new Array(res.data.length).fill(''));
             setScore(null);
             setRecommendations([]);
+            setDetailedResults([]);
             setCurrentQuestionIndex(0);
         } catch (error) {
             console.error('Error generating test:', error);
@@ -67,11 +87,16 @@ const Tests = () => {
         setCurrentQuestionIndex(currentQuestionIndex - 1);
     };
 
+    const handleQuestionSelect = (selectedOption: any) => {
+        setCurrentQuestionIndex(selectedOption.value);
+    };
+
     const handleSubmitTest = async () => {
         try {
-            const res = await axios.post('https://mathbilimai-server.onrender.com/api/ai/submit-test', {
+            const res = await axios.post('http://localhost:5003/api/submit-test', {
                 answers: selectedAnswers,
                 correctAnswers: questions.map(q => q.correctAnswer),
+                questionIds: questions.map(q => q._id)
             }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -79,29 +104,111 @@ const Tests = () => {
             });
             setScore(res.data.score);
             setRecommendations(res.data.recommendations);
+            setDetailedResults(res.data.detailedResults);
+
+            const missedTopics = res.data.missedTopics;
+
+            setTopics(missedTopics);
         } catch (error) {
             console.error('Error submitting test:', error);
         }
     };
 
-    const handleDownloadPDF = () => {
-        const doc = new jsPDF();
-        doc.text(`Тақырыбы: ${subject}`, 10, 10);
-        doc.text(`Қиындық деңгейі: ${difficulty}`, 10, 20);
-        questions.forEach((question, index) => {
-            doc.text(`${index + 1}. ${question.question}`, 10, 30 + index * 10);
-            question.options.forEach((option, idx) => {
-                doc.text(`${String.fromCharCode(65 + idx)}. ${option}`, 20, 35 + index * 10 + idx * 5);
+    const handleCreateCourse = async (topic: string) => {
+        setLoading(true);
+        try {
+            const res = await axios.post('http://localhost:5003/api/create-course', {
+                topics: [topic]
             });
+            setCourseMaterials(res.data.course_materials);
+            setCourseCreated(true);
+            setCreatedTopic(topic);
+        } catch (error) {
+            console.error('Error creating course:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleViewCourse = () => {
+        router.push({
+            pathname: '/course',
+            query: { topic: createdTopic, courseMaterials: JSON.stringify(courseMaterials) }
         });
-        doc.save('test.pdf');
+    };
+
+    const questionOptions = questions.map((q, index) => ({
+        value: index,
+        label: `Вопрос ${index + 1}`
+    }));
+
+    const renderScoreCircle = () => {
+        return (
+            <div className="flex justify-center items-center h-64 w-64 mx-auto">
+                <CircularProgressbar
+                    value={score || 0}
+                    maxValue={20}
+                    text={`${score !== null ? score : 0}/20`}
+                    styles={buildStyles({
+                        pathColor: `rgba(255, 193, 7, ${(score || 0) / 20})`,
+                        textColor: '#FFC107',
+                        trailColor: '#d6d6d6',
+                        backgroundColor: '#3e98c7',
+                    })}
+                    className="animate__animated animate__fadeIn"
+                />
+            </div>
+        );
+    };
+
+    const renderDetailedResult = (result: DetailedResult, index: number) => {
+        const question = questions[result.questionIndex];
+        return (
+            <div key={index} className="mt-2 p-4 bg-white shadow-md rounded-lg">
+                <p className="text-red-500">
+                    Неправильно - Вопрос {result.questionIndex + 1}
+                </p>
+                <button
+                    className="text-sm text-blue-600 underline mt-2"
+                    onClick={() => setCurrentQuestionIndex(result.questionIndex)}
+                >
+                    Перейти к вопросу
+                </button>
+                {currentQuestionIndex === result.questionIndex && question && (
+                    <div className="mt-2">
+                        <p className="text-black">
+                            <MathJaxComponent>{question.question}</MathJaxComponent>
+                        </p>
+                        {question.options.map((option, idx) => (
+                            <div
+                                key={idx}
+                                className={`flex items-center mb-2 p-2 rounded-lg ${result.givenAnswer === option ? 'bg-red-100' : result.correctAnswer === option ? 'bg-green-100' : ''
+                                    }`}
+                            >
+                                <input
+                                    type="radio"
+                                    name={`question-${result.questionIndex}`}
+                                    value={option}
+                                    checked={selectedAnswers[result.questionIndex] === option}
+                                    readOnly
+                                    className="mr-2"
+                                />
+                                <label className="text-black">
+                                    <MathJaxComponent>{option}</MathJaxComponent>
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
     };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 md:p-10">
             <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
                 <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Тест тапсыру</h1>
-                {!questions.length ? (
+                {!questions.length && !score ? (
                     <div className="w-full">
                         <h3 className='font-semibold mb-4 text-lg text-blue-600'>Пән мен қиындық деңгейін таңдаңыз</h3>
                         <div className="mb-6">
@@ -113,8 +220,6 @@ const Tests = () => {
                             >
                                 <option value="" disabled hidden>Пәнді таңдаңыз</option>
                                 <option value="Мектеп математикасы">Мектеп математикасы</option>
-                                <option value="Сызықтық алгебра">Сызықтық алгебра</option>
-                                <option value="Математикалық талдау">Математикалық талдау</option>
                             </select>
                         </div>
                         <div className="mb-6">
@@ -139,26 +244,36 @@ const Tests = () => {
                     </div>
                 ) : (
                     <div>
-                        <div className="mb-4">
-                            <p className="font-semibold text-lg text-blue-600 mb-2">{questions[currentQuestionIndex].question}</p>
-                            {questions[currentQuestionIndex].options.map((option, idx) => (
-                                <div 
-                                    key={idx} 
-                                    className={`flex items-center mb-2 p-2 rounded-lg cursor-pointer hover:bg-gray-200 transition-all duration-300 ${selectedAnswers[currentQuestionIndex] === option ? 'bg-blue-100' : ''}`}
-                                    onClick={() => handleSelectAnswer(option)}
-                                >
-                                    <input
-                                        type="radio"
-                                        name={`question-${currentQuestionIndex}`}
-                                        value={option}
-                                        checked={selectedAnswers[currentQuestionIndex] === option}
-                                        readOnly
-                                        className="mr-2"
-                                    />
-                                    <label className="text-black">{option}</label>
-                                </div>
-                            ))}
-                        </div>
+                        {questions.length > 0 && (
+                            <div className="mb-4">
+                                <p className="font-semibold text-lg text-blue-600 mb-2">
+                                    <MathJaxComponent>
+                                        {questions[currentQuestionIndex]?.question}
+                                    </MathJaxComponent>
+                                </p>
+                                {questions[currentQuestionIndex]?.options.map((option, idx) => (
+                                    <div 
+                                        key={idx} 
+                                        className={`flex items-center mb-2 p-2 rounded-lg cursor-pointer hover:bg-gray-200 transition-all duration-300 ${selectedAnswers[currentQuestionIndex] === option ? 'bg-blue-100' : ''}`}
+                                        onClick={() => handleSelectAnswer(option)}
+                                    >
+                                        <input
+                                            type="radio"
+                                            name={`question-${currentQuestionIndex}`}
+                                            value={option}
+                                            checked={selectedAnswers[currentQuestionIndex] === option}
+                                            readOnly
+                                            className="mr-2"
+                                        />
+                                        <label className="text-black">
+                                            <MathJaxComponent>
+                                                {option}
+                                            </MathJaxComponent>
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                         <div className="flex justify-between items-center mt-4">
                             <button
                                 onClick={handlePreviousQuestion}
@@ -181,6 +296,14 @@ const Tests = () => {
                                 Келесі
                             </button>
                         </div>
+                        <div className="mt-4">
+                            <Select 
+                                options={questionOptions} 
+                                onChange={handleQuestionSelect} 
+                                className="w-full"
+                                placeholder="Выбрать вопрос для перехода"
+                            />
+                        </div>
                         {currentQuestionIndex === questions.length - 1 && (
                             <div className="flex justify-center mt-6">
                                 <button
@@ -191,70 +314,75 @@ const Tests = () => {
                                 </button>
                             </div>
                         )}
-                        <div className="mt-8 flex justify-center">
-                            <button
-                                onClick={handleDownloadPDF}
-                                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
-                            >
-                                Тестті жүктеу
-                            </button>
-                        </div>
                     </div>
                 )}
                 {score !== null && (
                     <div className="mt-8">
-                        <h2 className="text-2xl font-bold text-blue-600">Сіздің нәтижеңіз: {score}</h2>
+                        <h2 className="text-2xl font-bold text-blue-600 animate__animated animate__fadeIn">Сіздің нәтижеңіз: {score}</h2>
+                        {renderScoreCircle()}
                         <h3 className="text-xl font-semibold text-blue-600 mt-4">Ұсыныстар:</h3>
                         <ul className="list-disc list-inside text-gray-700 mt-2">
                             {recommendations.map((rec, index) => (
-                                <li key={index}>{rec}</li>
+                                <li key={index} className="text-lg leading-relaxed">{rec}</li>
                             ))}
                         </ul>
+                        <h3 className="text-xl font-semibold text-blue-600 mt-4">Детализированные результаты:</h3>
+                        <ul className="list-disc list-inside text-gray-700 mt-2">
+                            {detailedResults.filter(result => !result.isCorrect).map((result, index) => (
+                                renderDetailedResult(result, index)
+                            ))}
+                        </ul>
+                        {topics.length > 0 && (
+                            <div className="mt-4">
+                                <h3 className="text-xl font-semibold text-blue-600 mt-4">Темы, которые требуют повторения:</h3>
+                                <ul className="list-disc list-inside text-gray-700 mt-2">
+                                    {topics.map((topic, index) => (
+                                        <li key={index} className="flex items-center justify-between">
+                                            {topic}
+                                            <button
+                                                onClick={() => handleCreateCourse(topic)}
+                                                className="ml-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
+                                            >
+                                                Создать курс
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                                {loading ? (
+                                    <button
+                                        className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors duration-300 mt-4"
+                                        disabled
+                                    >
+                                        Курсты жасау...
+                                    </button>
+                                ) : courseCreated && createdTopic ? (
+                                    <div className="flex flex-col items-center mt-4">
+                                        <p className="text-blue-600 font-semibold">Курс по теме "{createdTopic}" успешно создан!</p>
+                                        <button
+                                            onClick={handleViewCourse}
+                                            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-300 mt-2"
+                                        >
+                                            Перейти на курс
+                                        </button>
+                                    </div>
+                                ) : null}
+                            </div>
+                        )}
+                        {courseMaterials && courseMaterials.length > 0 && (
+                            <div className="mt-4">
+                                <h3 className="text-xl font-semibold text-blue-600 mt-4">Курс:</h3>
+                                <ul className="list-disc list-inside text-gray-700 mt-2">
+                                    {courseMaterials.map((material, index) => (
+                                        <li key={index}>{material}</li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
         </div>
     );
 };
-
-// @ts-ignore
-function ChevronLeftIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="m15 18-6-6 6-6" />
-        </svg>
-    );
-}
-
-// @ts-ignore
-function ChevronRightIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="m9 18 6-6-6-6" />
-        </svg>
-    );
-}
 
 export default Tests;
