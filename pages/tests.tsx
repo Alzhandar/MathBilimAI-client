@@ -51,7 +51,7 @@ const Tests = () => {
     const handleGenerateTest = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('https://mathbilimai-server.onrender.com/api/questions/random', {
+            const res = await axios.get('http://localhost:5003/api/questions/random', {
                 params: {
                     difficulty,
                     count: 20
@@ -93,7 +93,7 @@ const Tests = () => {
 
     const handleSubmitTest = async () => {
         try {
-            const res = await axios.post('https://mathbilimai-server.onrender.com/api/submit-test', {
+            const res = await axios.post('http://localhost:5003/api/submit-test', {
                 answers: selectedAnswers,
                 correctAnswers: questions.map(q => q.correctAnswer),
                 questionIds: questions.map(q => q._id)
@@ -117,7 +117,7 @@ const Tests = () => {
     const handleCreateCourse = async (topic: string) => {
         setLoading(true);
         try {
-            const res = await axios.post('https://mathbilimai-server.onrender.com/api/create-course', {
+            const res = await axios.post('http://localhost:5003/api/create-course', {
                 topics: [topic]
             });
             setCourseMaterials(res.data.course_materials);
@@ -150,8 +150,8 @@ const Tests = () => {
                     maxValue={20}
                     text={`${score !== null ? score : 0}/20`}
                     styles={buildStyles({
-                        pathColor: `rgba(255, 193, 7, ${(score || 0) / 20})`,
-                        textColor: '#FFC107',
+                        pathColor: `rgba(38, 99, 235, ${(score || 0) / 20})`,
+                        textColor: '#2663EB',
                         trailColor: '#d6d6d6',
                         backgroundColor: '#3e98c7',
                     })}
@@ -164,18 +164,18 @@ const Tests = () => {
     const renderDetailedResult = (result: DetailedResult, index: number) => {
         const question = questions[result.questionIndex];
         return (
-            <div key={index} className="mt-2 p-4 bg-white shadow-md rounded-lg">
-                <p className="text-red-500">
+            <div key={index} className="mt-2 p-4 bg-white shadow-md rounded-lg animate__animated animate__fadeIn">
+                <p className="text-[#FF0000] font-bold">
                     Неправильно - Вопрос {result.questionIndex + 1}
                 </p>
                 <button
-                    className="text-sm text-blue-600 underline mt-2"
+                    className="text-sm text-[#2663EB] underline mt-2 hover:text-blue-800 transition-colors"
                     onClick={() => setCurrentQuestionIndex(result.questionIndex)}
                 >
                     Перейти к вопросу
                 </button>
                 {currentQuestionIndex === result.questionIndex && question && (
-                    <div className="mt-2">
+                    <div className="mt-2 animate__animated animate__fadeIn">
                         <p className="text-black">
                             <MathJaxComponent>{question.question}</MathJaxComponent>
                         </p>
@@ -207,16 +207,16 @@ const Tests = () => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 md:p-10">
             <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
-                <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Тест тапсыру</h1>
+                <h1 className="text-3xl font-bold mb-6 text-center text-[#2663EB]">Тест тапсыру</h1>
                 {!questions.length && !score ? (
                     <div className="w-full">
-                        <h3 className='font-semibold mb-4 text-lg text-blue-600'>Пән мен қиындық деңгейін таңдаңыз</h3>
+                        <h3 className='font-semibold mb-4 text-lg text-[#2663EB]'>Пән мен қиындық деңгейін таңдаңыз</h3>
                         <div className="mb-6">
                             <select
                                 id="subject"
                                 value={subject}
                                 onChange={(e) => setSubject(e.target.value)}
-                                className="block appearance-none w-full bg-white border border-gray-300 text-black py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                className="block appearance-none w-full bg-white border border-gray-300 text-black py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-[#2663EB]"
                             >
                                 <option value="" disabled hidden>Пәнді таңдаңыз</option>
                                 <option value="Мектеп математикасы">Мектеп математикасы</option>
@@ -227,7 +227,7 @@ const Tests = () => {
                                 id="difficulty"
                                 value={difficulty}
                                 onChange={(e) => setDifficulty(e.target.value)}
-                                className="block appearance-none w-full bg-white border border-gray-300 text-black py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
+                                className="block appearance-none w-full bg-white border border-gray-300 text-black py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-[#2663EB]"
                             >
                                 <option value="" disabled hidden>Қиындық деңгейін таңдаңыз</option>
                                 <option value="оңай">Оңай</option>
@@ -237,7 +237,7 @@ const Tests = () => {
                         </div>
                         <button
                             onClick={handleGenerateTest}
-                            className="bg-blue-600 text-white px-5 py-3 rounded-md hover:bg-blue-700 transition-colors duration-300 mb-4 w-full"
+                            className="bg-[#2663EB] text-white px-5 py-3 rounded-md hover:bg-blue-700 transition-colors duration-300 mb-4 w-full"
                         >
                             Тест жасау
                         </button>
@@ -246,7 +246,7 @@ const Tests = () => {
                     <div>
                         {questions.length > 0 && (
                             <div className="mb-4">
-                                <p className="font-semibold text-lg text-blue-600 mb-2">
+                                <p className="font-semibold text-lg text-[#2663EB] mb-2">
                                     <MathJaxComponent>
                                         {questions[currentQuestionIndex]?.question}
                                     </MathJaxComponent>
@@ -284,9 +284,9 @@ const Tests = () => {
                             </button>
                             <div className="flex items-center w-full px-4">
                                 <div className="w-full bg-gray-200 rounded-full h-4">
-                                    <div className="bg-blue-600 h-4 rounded-full" style={{ width: `${(currentQuestionIndex + 1) / questions.length * 100}%` }}></div>
+                                    <div className="bg-[#2663EB] h-4 rounded-full" style={{ width: `${(currentQuestionIndex + 1) / questions.length * 100}%` }}></div>
                                 </div>
-                                <span className="ml-4 text-blue-600 font-semibold">{currentQuestionIndex + 1}/{questions.length}</span>
+                                <span className="ml-4 text-[#2663EB] font-semibold">{currentQuestionIndex + 1}/{questions.length}</span>
                             </div>
                             <button
                                 onClick={handleNextQuestion}
@@ -308,7 +308,7 @@ const Tests = () => {
                             <div className="flex justify-center mt-6">
                                 <button
                                     onClick={handleSubmitTest}
-                                    className="bg-green-500 text-white px-6 py-3 rounded-md hover:bg-green-600 transition-colors duration-300"
+                                    className="bg-[#2663EB] text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors duration-300"
                                 >
                                     Тестті тапсыру
                                 </button>
@@ -318,15 +318,15 @@ const Tests = () => {
                 )}
                 {score !== null && (
                     <div className="mt-8">
-                        <h2 className="text-2xl font-bold text-blue-600 animate__animated animate__fadeIn">Сіздің нәтижеңіз: {score}</h2>
+                        <h2 className="text-2xl font-bold text-[#2663EB] animate__animated animate__fadeIn">Сіздің нәтижеңіз: {score}</h2>
                         {renderScoreCircle()}
-                        <h3 className="text-xl font-semibold text-blue-600 mt-4">Ұсыныстар:</h3>
+                        <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Ұсыныстар:</h3>
                         <ul className="list-disc list-inside text-gray-700 mt-2">
                             {recommendations.map((rec, index) => (
                                 <li key={index} className="text-lg leading-relaxed">{rec}</li>
                             ))}
                         </ul>
-                        <h3 className="text-xl font-semibold text-blue-600 mt-4">Детализированные результаты:</h3>
+                        <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Детализированные результаты:</h3>
                         <ul className="list-disc list-inside text-gray-700 mt-2">
                             {detailedResults.filter(result => !result.isCorrect).map((result, index) => (
                                 renderDetailedResult(result, index)
@@ -334,14 +334,14 @@ const Tests = () => {
                         </ul>
                         {topics.length > 0 && (
                             <div className="mt-4">
-                                <h3 className="text-xl font-semibold text-blue-600 mt-4">Темы, которые требуют повторения:</h3>
+                                <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Темы, которые требуют повторения:</h3>
                                 <ul className="list-disc list-inside text-gray-700 mt-2">
                                     {topics.map((topic, index) => (
                                         <li key={index} className="flex items-center justify-between">
                                             {topic}
                                             <button
                                                 onClick={() => handleCreateCourse(topic)}
-                                                className="ml-4 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
+                                                className="ml-4 bg-[#2663EB] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
                                             >
                                                 Создать курс
                                             </button>
@@ -357,7 +357,7 @@ const Tests = () => {
                                     </button>
                                 ) : courseCreated && createdTopic ? (
                                     <div className="flex flex-col items-center mt-4">
-                                        <p className="text-blue-600 font-semibold">Курс по теме "{createdTopic}" успешно создан!</p>
+                                        <p className="text-[#2663EB] font-semibold">Курс по теме "{createdTopic}" успешно создан!</p>
                                         <button
                                             onClick={handleViewCourse}
                                             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-300 mt-2"
@@ -370,7 +370,7 @@ const Tests = () => {
                         )}
                         {courseMaterials && courseMaterials.length > 0 && (
                             <div className="mt-4">
-                                <h3 className="text-xl font-semibold text-blue-600 mt-4">Курс:</h3>
+                                <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Курс:</h3>
                                 <ul className="list-disc list-inside text-gray-700 mt-2">
                                     {courseMaterials.map((material, index) => (
                                         <li key={index}>{material}</li>
