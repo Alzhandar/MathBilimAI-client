@@ -51,7 +51,7 @@ const Tests = () => {
     const handleGenerateTest = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('http://localhost:5003/api/questions/random', {
+            const res = await axios.get('https://mathbilimai-server.onrender.com/api/questions/random', {
                 params: {
                     difficulty,
                     count: 20
@@ -93,7 +93,7 @@ const Tests = () => {
 
     const handleSubmitTest = async () => {
         try {
-            const res = await axios.post('http://localhost:5003/api/submit-test', {
+            const res = await axios.post('https://mathbilimai-server.onrender.com/api/submit-test', {
                 answers: selectedAnswers,
                 correctAnswers: questions.map(q => q.correctAnswer),
                 questionIds: questions.map(q => q._id)
@@ -117,7 +117,7 @@ const Tests = () => {
     const handleCreateCourse = async (topic: string) => {
         setLoading(true);
         try {
-            const res = await axios.post('http://localhost:5003/api/create-course', {
+            const res = await axios.post('https://mathbilimai-server.onrender.com/api/create-course', {
                 topics: [topic]
             });
             setCourseMaterials(res.data.course_materials);
