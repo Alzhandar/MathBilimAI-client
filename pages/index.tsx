@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
-import Link from "next/link";
-import Img from "./images/Social-Math_2880x1700_Lede.jpg";
+import Link from 'next/link';
 import EmilImage from "./images/photo_2024-08-02 19.36.29.jpeg";
 import DauletImage from "./images/photo_2024-08-02 19.36.32.jpeg";
 import NurbekImage from "./images/photo_2024-08-02 19.36.27.jpeg";
@@ -11,6 +10,7 @@ import ErkebulanImage from "./images/photo_2024-08-02 19.36.35.jpeg";
 const Home = () => {
     const { user } = useAuth();
     const router = useRouter();
+    const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
 
     const handleGetStarted = () => {
         if (user) {
@@ -57,6 +57,29 @@ const Home = () => {
         return () => clearInterval(intervalId);
     }, []);
 
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__fadeInUp');
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        elementsRef.current.forEach((el) => {
+            if (el) observer.observe(el);
+        });
+
+        return () => {
+            elementsRef.current.forEach((el) => {
+                if (el) observer.unobserve(el);
+            });
+        };
+    }, []);
+
     const handleSwipeStart = (e: React.TouchEvent<HTMLDivElement>) => {
         // Начало свайпа
     };
@@ -74,33 +97,25 @@ const Home = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gray-100">
             <main className="flex-1">
-                <section className="w-full py-12 md:py-24 lg:py-32 bg-white">
-                    <div className="container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12">
-                        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:gap-12">
-                            <div className="flex flex-col justify-center">
-                                <h1 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl lg:text-6xl">
-                                    MathBilimAI-ға қош келдіңіз
-                                </h1>
-                                <p className="mt-4 max-w-[600px] text-gray-700 md:text-xl lg:text-lg">
-                                    MathBilimAI сізге ЕНТ-ға дайындалуға көмектесетін онлайн платформа. Біз сіздің әлсіз тұстарыңызды анықтап, қажетті материалдарды ұсынатын ИИ-оқытушыны ұсынамыз.
-                                </p>
-                                <div className="mt-6">
-                                    <button
-                                        onClick={handleGetStarted}
-                                        className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300 mb-4"
-                                    >
-                                        Қазір көріңіз
-                                    </button>
-                                </div>
-                            </div>
-                            <div>
-                                <img
-                                    src={Img.src}
-                                    width="600"
-                                    height="400"
-                                    alt="Hero"
-                                    className="mx-auto aspect-[3/2] overflow-hidden rounded-xl object-cover"
-                                />
+                <section className="relative w-full py-12 md:py-24 lg:py-32 bg-white">
+                    <video autoPlay loop muted className="absolute inset-0 w-full h-full object-cover">
+                        <source src="/images/video.mp4" type="video/mp4" />
+                    </video>
+                    <div className="relative z-10 container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12 text-center">
+                        <div className="flex flex-col justify-center items-center">
+                            <h1 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl lg:text-6xl">
+                                MathBilimAI-ға қош келдіңіз
+                            </h1>
+                            <p className="mt-4 max-w-[600px] text-white md:text-xl lg:text-lg">
+                                MathBilimAI сізге ЕНТ-ға дайындалуға көмектесетін онлайн платформа. Біз сіздің әлсіз тұстарыңызды анықтап, қажетті материалдарды ұсынатын ИИ-оқытушыны ұсынамыз.
+                            </p>
+                            <div className="mt-6">
+                                <button
+                                    onClick={handleGetStarted}
+                                    className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300 mb-4"
+                                >
+                                    Қазір көріңіз
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -116,17 +131,17 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:gap-8">
-                            <FeatureCard 
+                            <FeatureCard
                                 icon={<AiTeacherIcon className="h-8 w-8 text-blue-600" />}
                                 title="ИИ оқытушы"
                                 description="Искуственный интеллект көмегімен материалдарды оқып үйренуге арналған нұсқаулықтар алыңыз."
                             />
-                            <FeatureCard 
+                            <FeatureCard
                                 icon={<AnalysisIcon className="h-8 w-8 text-blue-600" />}
                                 title="Тапсырмаларды талдау"
                                 description="Ең қиын тапсырмаларды талдап, оларды шешу жолдарын үйреніңіз."
                             />
-                            <FeatureCard 
+                            <FeatureCard
                                 icon={<MaterialIcon className="h-8 w-8 text-blue-600" />}
                                 title="Материалдар"
                                 description="ЕНТ-ға дайындыққа арналған сапалы материалдарды алыңыз."
@@ -283,6 +298,19 @@ const Home = () => {
                     overflow: hidden;
                     border-right: 3px solid #2663EB;
                     animation: typing 4s steps(40, end), blink 0.75s step-end infinite;
+                }
+
+                .animate__fadeInUp {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    animation: fadeInUp 1s forwards;
+                }
+
+                @keyframes fadeInUp {
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
                 }
 
                 @media (max-width: 768px) {

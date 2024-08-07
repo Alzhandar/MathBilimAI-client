@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 const texts = [
-'ҰБТ-ға дайындалу үшін ең жақсы ресурстар.',
+    'ҰБТ-ға дайындалу үшін ең жақсы ресурстар.',
     'Математика бойынша кеңестер мен әдістер.',
     'ҰБТ-ға табысты өту үшін қажетті ақпарат.'
 ];
@@ -36,7 +36,7 @@ const Dashboard = () => {
                 <section className="w-full py-8">
                     <div className="container mx-auto px-4 md:px-6 space-y-8">
                         <div className="text-center">
-                            <h1 className="text-4xl font-bold mb-4 text-gray-800 font-mono">
+                            <h1 className="text-4xl font-bold mb-4 text-gray-800 typewriter-container">
                                 <span className="typewriter">{displayedText}</span>
                             </h1>
                             <p className="text-lg mb-8 text-gray-700">
@@ -171,6 +171,12 @@ const Dashboard = () => {
 
                 @keyframes blink {
                     50% { border-color: transparent; }
+                }
+
+                .typewriter-container {
+                    display: inline-block;
+                    position: relative;
+                    width: 100%;
                 }
 
                 .typewriter {
