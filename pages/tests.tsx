@@ -166,13 +166,13 @@ const Tests = () => {
         return (
             <div key={index} className="mt-2 p-4 bg-white shadow-md rounded-lg animate__animated animate__fadeIn">
                 <p className="text-[#FF0000] font-bold">
-                    Неправильно - Вопрос {result.questionIndex + 1}
+                    Қате - Сұрақ {result.questionIndex + 1}
                 </p>
                 <button
                     className="text-sm text-[#2663EB] underline mt-2 hover:text-blue-800 transition-colors"
                     onClick={() => setCurrentQuestionIndex(result.questionIndex)}
                 >
-                    Перейти к вопросу
+                    Сұраққа өту
                 </button>
                 {currentQuestionIndex === result.questionIndex && question && (
                     <div className="mt-2 animate__animated animate__fadeIn">
@@ -246,7 +246,7 @@ const Tests = () => {
                     <div>
                         {questions.length > 0 && (
                             <div className="mb-4">
-                                <p className="font-semibold text-lg text-[#2663EB] mb-2">
+                                <p className="font-semibold text-lg text-[#2663EB] mb-2 animate__animated animate__fadeIn">
                                     <MathJaxComponent>
                                         {questions[currentQuestionIndex]?.question}
                                     </MathJaxComponent>
@@ -301,7 +301,7 @@ const Tests = () => {
                                 options={questionOptions} 
                                 onChange={handleQuestionSelect} 
                                 className="w-full"
-                                placeholder="Выбрать вопрос для перехода"
+                                placeholder="Сұрақты таңдау үшін басыңыз"
                             />
                         </div>
                         {currentQuestionIndex === questions.length - 1 && (
@@ -326,7 +326,7 @@ const Tests = () => {
                                 <li key={index} className="text-lg leading-relaxed">{rec}</li>
                             ))}
                         </ul>
-                        <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Детализированные результаты:</h3>
+                        <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Толығырақ нәтижелер:</h3>
                         <ul className="list-disc list-inside text-gray-700 mt-2">
                             {detailedResults.filter(result => !result.isCorrect).map((result, index) => (
                                 renderDetailedResult(result, index)
@@ -334,7 +334,7 @@ const Tests = () => {
                         </ul>
                         {topics.length > 0 && (
                             <div className="mt-4">
-                                <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Темы, которые требуют повторения:</h3>
+                                <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Қайталануды қажет ететін тақырыптар:</h3>
                                 <ul className="list-disc list-inside text-gray-700 mt-2">
                                     {topics.map((topic, index) => (
                                         <li key={index} className="flex items-center justify-between">
@@ -343,7 +343,7 @@ const Tests = () => {
                                                 onClick={() => handleCreateCourse(topic)}
                                                 className="ml-4 bg-[#2663EB] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300"
                                             >
-                                                Создать курс
+                                                Курс құру
                                             </button>
                                         </li>
                                     ))}
@@ -353,16 +353,16 @@ const Tests = () => {
                                         className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition-colors duration-300 mt-4"
                                         disabled
                                     >
-                                        Курсты жасау...
+                                        Курс құруда...
                                     </button>
                                 ) : courseCreated && createdTopic ? (
                                     <div className="flex flex-col items-center mt-4">
-                                        <p className="text-[#2663EB] font-semibold">Курс по теме "{createdTopic}" успешно создан!</p>
+                                        <p className="text-[#2663EB] font-semibold">"{createdTopic}" тақырыбы бойынша курс сәтті құрылды!</p>
                                         <button
                                             onClick={handleViewCourse}
                                             className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-300 mt-2"
                                         >
-                                            Перейти на курс
+                                            Курсты көру
                                         </button>
                                     </div>
                                 ) : null}

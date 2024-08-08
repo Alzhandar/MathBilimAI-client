@@ -23,10 +23,7 @@ const Login = () => {
                 router.push('/dashboard');
             }, 2000);
         } catch (error) {
-            setMessage('Ошибка: пользователя не существует.');
-            setTimeout(() => {
-                setMessage('');
-            }, 2000);
+            setMessage('Пайдаланушы табылған жоқ. Қайта енгізіңіз.');
         } finally {
             setIsLoading(false);
         }

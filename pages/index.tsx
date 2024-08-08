@@ -98,7 +98,15 @@ const Home = () => {
         <div className="flex flex-col min-h-screen bg-gray-100">
             <main className="flex-1">
                 <section className="relative w-full py-12 md:py-24 lg:py-32 bg-white">
-                    <video autoPlay loop muted className="absolute inset-0 w-full h-full object-cover">
+                    <video 
+                        autoPlay 
+                        loop 
+                        muted 
+                        playsInline
+                        controls={false}
+                        disablePictureInPicture
+                        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                    >
                         <source src="/images/video.mp4" type="video/mp4" />
                     </video>
                     <div className="relative z-10 container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12 text-center">
@@ -211,10 +219,10 @@ const Home = () => {
                             >
                                 {testimonials.map((testimonial, index) => (
                                     <div key={index} className="min-w-full flex-shrink-0 p-6 text-center space-y-4">
-                                        <div className="flex justify-center mb-4">
-                                            <img src={testimonial.image.src} alt={testimonial.author} className="w-24 h-24 rounded-full object-cover" />
+                                        <div className="flex justify-center mb-4 flex-wrap">
+                                            <img src={testimonial.image.src} alt={testimonial.author} className="w-24 h-24 rounded-full object-cover mb-2 md:mb-0 md:mr-2" />
+                                            <p className="text-gray-800 md:w-auto md:flex-1">{testimonial.text}</p>
                                         </div>
-                                        <p className="text-gray-800">{testimonial.text}</p>
                                         <div className="text-center">
                                             <p className="text-gray-800 font-semibold">{testimonial.author}</p>
                                             <p className="text-gray-600">{testimonial.role}</p>
@@ -226,7 +234,7 @@ const Home = () => {
                     </div>
                 </section>
             </main>
-            <footer className="relative bg-blue-600 text-white py-4 mt-12 overflow-hidden rounded-t-2xl">
+            <footer className="relative bg-blue-600 text-white py-3 mt-12 overflow-hidden rounded-t-2xl">
                 <div className="absolute inset-0">
                     <div className="flex flex-wrap justify-center items-center w-full h-full opacity-10">
                         <span className="text-4xl mx-2">a² + b² = c²</span>
@@ -337,6 +345,11 @@ const Home = () => {
                     .container {
                         padding-left: 1rem;
                         padding-right: 1rem;
+                    }
+
+                    .testimonial-image {
+                        width: 100%;
+                        height: auto;
                     }
                 }
             `}</style>
