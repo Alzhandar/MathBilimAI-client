@@ -10,7 +10,7 @@ import ErkebulanImage from "./images/photo_2024-08-02 19.36.35.jpeg";
 const Home = () => {
     const { user } = useAuth();
     const router = useRouter();
-    const elementsRef = useRef<(HTMLDivElement | null)[]>([]);
+    const elementsRef = useRef<HTMLDivElement[]>([]);
 
     const handleGetStarted = () => {
         if (user) {
@@ -130,7 +130,7 @@ const Home = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:gap-8">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:gap-8" ref={(el) => { if (el) elementsRef.current[0] = el }}>
                             <FeatureCard
                                 icon={<AiTeacherIcon className="h-8 w-8 text-blue-600" />}
                                 title="ИИ оқытушы"
@@ -151,7 +151,7 @@ const Home = () => {
                 </section>
                 <section className="bg-white w-full py-12 md:py-24">
                     <div className="container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12">
-                        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                        <div className="flex flex-col items-center justify-center space-y-4 text-center" ref={(el) => { if (el) elementsRef.current[1] = el }}>
                             <div className="space-y-2">
                                 <h2 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl">Қалай жұмыс істейді</h2>
                                 <p className="max-w-[700px] text-gray-700 md:text-xl lg:text-lg">
@@ -159,7 +159,7 @@ const Home = () => {
                                 </p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" ref={(el) => { if (el) elementsRef.current[2] = el }}>
                             <div className="flex flex-col items-center text-center">
                                 <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center mb-4">
                                     <span className="text-2xl font-bold">1</span>
@@ -193,7 +193,7 @@ const Home = () => {
                 </section>
                 <section className="bg-white w-full py-12 md:py-24">
                     <div className="container mx-auto px-4 md:px-6 space-y-8 lg:space-y-12">
-                        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+                        <div className="flex flex-col items-center justify-center space-y-4 text-center" ref={(el) => { if (el) elementsRef.current[3] = el }}>
                             <div className="space-y-2">
                                 <h2 className="text-3xl font-bold tracking-tighter text-blue-600 sm:text-4xl md:text-5xl">Пайдаланушылардың пікірлері</h2>
                                 <p className="max-w-[700px] text-gray-700 md:text-xl lg:text-lg">
