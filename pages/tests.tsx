@@ -35,18 +35,30 @@ const Tests = () => {
     const [subject, setSubject] = useState<string>('');
     const [difficulty, setDifficulty] = useState<string>('');
     const [questions, setQuestions] = useState<Question[]>([]);
+    const [topics, setTopics] = useState<string[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
     const [score, setScore] = useState<number | null>(null);
     const [recommendations, setRecommendations] = useState<string[]>([]);
     const [detailedResults, setDetailedResults] = useState<DetailedResult[]>([]);
-    const [topics, setTopics] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [courseMaterials, setCourseMaterials] = useState<string[]>([]);
     const [courseCreated, setCourseCreated] = useState<boolean>(false);
     const [createdTopic, setCreatedTopic] = useState<string | null>(null);
     const { user } = useAuth();
     const router = useRouter();
+
+    useEffect(() => {
+        const fetchTopics = async () => {
+            try {
+                const res = await axios.get('https://mathbilimai-server-production.up.railway.app/api/questions/topics');
+                setTopics(res.data);
+            } catch (error) {
+                console.error('Error fetching topics:', error);
+            }
+        };
+        fetchTopics();
+    }, []);
 
     const handleGenerateTest = async () => {
         setLoading(true);
@@ -68,6 +80,31 @@ const Tests = () => {
             setCurrentQuestionIndex(0);
         } catch (error) {
             console.error('Error generating test:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGenerateTestByTopic = async (topic: string) => {
+        setLoading(true);
+        try {
+            const res = await axios.get('https://mathbilimai-server-production.up.railway.app/api/questions/topic', {
+                params: {
+                    topic,
+                    count: 20
+                },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            setQuestions(res.data);
+            setSelectedAnswers(new Array(res.data.length).fill(''));
+            setScore(null);
+            setRecommendations([]);
+            setDetailedResults([]);
+            setCurrentQuestionIndex(0);
+        } catch (error) {
+            console.error('Error generating test by topic:', error);
         } finally {
             setLoading(false);
         }
@@ -139,7 +176,7 @@ const Tests = () => {
 
     const questionOptions = questions.map((q, index) => ({
         value: index,
-        label: `Вопрос ${index + 1}`
+        label: `Сұрақ ${index + 1}`
     }));
 
     const renderScoreCircle = () => {
@@ -205,12 +242,13 @@ const Tests = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6 md:p-10">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6 md:p-10">
             <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-4xl">
                 <h1 className="text-3xl font-bold mb-6 text-center text-[#2663EB]">Тест тапсыру</h1>
                 {!questions.length && !score ? (
                     <div className="w-full">
-                        <h3 className='font-semibold mb-4 text-lg text-[#2663EB]'>Пән мен қиындық деңгейін таңдаңыз</h3>
+                        <h2 className="text-3xl font-bold mb-6 text-center text-[#2663EB]">Әр түрлі сұрақтармен тест тапсырғыңыз келе ме?</h2>
+                        <h3 className='font-semibold mb-4 text-xl text-center text-[#2663EB]'>Пән мен қиындық деңгейін таңдаңыз</h3>
                         <div className="mb-6">
                             <select
                                 id="subject"
@@ -237,10 +275,22 @@ const Tests = () => {
                         </div>
                         <button
                             onClick={handleGenerateTest}
-                            className="bg-[#2663EB] text-white px-5 py-3 rounded-md hover:bg-blue-700 transition-colors duration-300 mb-4 w-full"
+                            className="bg-[#2663EB] text-white px-5 py-3 rounded-md hover:bg-blue-700 transition-colors duration-300 mb-8 w-full"
                         >
                             Тест жасау
                         </button>
+                        <h3 className='font-semibold mb-6 text-2xl text-center text-[#2663EB]'>Тақырыптар бойынша тест</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            {topics.map((topic, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => handleGenerateTestByTopic(topic)}
+                                    className="bg-gray-200 text-black px-6 py-4 rounded-lg hover:bg-gray-300 transition-colors duration-300 text-xl"
+                                >
+                                    {topic}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 ) : (
                     <div>

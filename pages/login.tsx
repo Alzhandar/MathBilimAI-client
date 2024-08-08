@@ -18,12 +18,15 @@ const Login = () => {
         setMessage('');
         try {
             await login(email, password);
-            setMessage('Вы успешно зашли!');
+            setMessage('Сіз сәтті кірдіңіз!');
             setTimeout(() => {
                 router.push('/dashboard');
-            }, 2000);
+            }, 20000);
         } catch (error) {
-            setMessage('Пайдаланушы табылған жоқ. Қайта енгізіңіз.');
+            setMessage('Пайдаланушы табылған жоқ. Қайтадан енгізіңіз.');
+            setTimeout(() => {
+                setMessage('');
+            }, 2000);
         } finally {
             setIsLoading(false);
         }

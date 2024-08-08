@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
             router.push('/dashboard');
         } catch (error) {
-            console.error(error);
+            throw new Error('Пайдаланушы табылған жоқ.');
         }
     };
 

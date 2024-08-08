@@ -95,7 +95,9 @@ const Home = () => {
     const currentTestimonial = testimonials[currentTestimonialIndex];
 
     return (
+        
         <div className="flex flex-col min-h-screen bg-gray-100">
+
             <main className="flex-1">
                 <section className="relative w-full py-12 md:py-24 lg:py-32 bg-white">
                     <video 
