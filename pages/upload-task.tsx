@@ -50,14 +50,14 @@ const TaskUploader = () => {
             const blob = await (await fetch(croppedImage)).blob();
             formData.append('image', blob, 'croppedImage.png');
 
-            const { data: uploadData } = await axios.post('https://mathbilimai-server.onrender.com/api/ai/upload-task', formData, {
+            const { data: uploadData } = await axios.post('https://mathbilimai-server-production.up.railway.app/api/ai/upload-task', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
             const { text } = uploadData;
-            const { data: analysisData } = await axios.post('https://mathbilimai-server.onrender.com/api/ai/analyze-task', { text });
+            const { data: analysisData } = await axios.post('https://mathbilimai-server-production.up.railway.app/api/ai/analyze-task', { text });
 
             setAnalysis(analysisData.analysis);
         } catch (error) {

@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (email: string, password: string) => {
         try {
-            const res = await axios.post('https://mathbilimai-server.onrender.com/api/auth/login', { email, password });
+            const res = await axios.post('https://mathbilimai-server-production.up.railway.app/api/auth/login', { email, password });
             setUser(res.data.user);
             localStorage.setItem('token', res.data.token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const register = async (username: string, email: string, password: string) => {
         try {
-            await axios.post('https://mathbilimai-server.onrender.com/api/auth/register', { username, email, password });
+            await axios.post('https://mathbilimai-server-production.up.railway.app/api/auth/register', { username, email, password });
             router.push('/login');
         } catch (error) {
             console.error(error);

@@ -38,7 +38,7 @@ const Chat = () => {
             setMessage('');
             setIsTyping(true);
             try {
-                const res = await axios.post('https://mathbilimai-server.onrender.com/api/ai/chat', { messages: newMessages }, {
+                const res = await axios.post('https://mathbilimai-server-production.up.railway.app/api/ai/chat', { messages: newMessages }, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
