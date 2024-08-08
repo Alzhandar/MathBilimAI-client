@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import Link from 'next/link';
 import EmilImage from "./images/photo_2024-08-02 19.36.29.jpeg";
 import DauletImage from "./images/photo_2024-08-02 19.36.32.jpeg";
@@ -95,9 +96,11 @@ const Home = () => {
     const currentTestimonial = testimonials[currentTestimonialIndex];
 
     return (
-        
         <div className="flex flex-col min-h-screen bg-gray-100">
-
+            <Head>
+                <title>MathBilimAI - Сіздің математикалық ИИ мұғаліміңіз</title>
+                <meta name="description" content="MathBilimAI - Математикалық білім беру үшін ең жақсы ИИ мұғаліміңіз." />
+            </Head>
             <main className="flex-1">
                 <section className="relative w-full py-12 md:py-24 lg:py-32 bg-white">
                     <video 

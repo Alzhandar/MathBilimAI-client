@@ -157,7 +157,7 @@ const Tests = () => {
             const res = await axios.post('https://mathbilimai-server-production.up.railway.app/api/create-course', {
                 topics: [topic]
             });
-            setCourseMaterials(res.data.course_materials);
+            setCourseMaterials(res.data.course_content || []); // Ensure courseMaterials is an array
             setCourseCreated(true);
             setCreatedTopic(topic);
         } catch (error) {
@@ -165,13 +165,6 @@ const Tests = () => {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleViewCourse = () => {
-        router.push({
-            pathname: '/course',
-            query: { topic: createdTopic, courseMaterials: JSON.stringify(courseMaterials) }
-        });
     };
 
     const questionOptions = questions.map((q, index) => ({
@@ -408,24 +401,17 @@ const Tests = () => {
                                 ) : courseCreated && createdTopic ? (
                                     <div className="flex flex-col items-center mt-4">
                                         <p className="text-[#2663EB] font-semibold">"{createdTopic}" тақырыбы бойынша курс сәтті құрылды!</p>
-                                        <button
-                                            onClick={handleViewCourse}
-                                            className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors duration-300 mt-2"
-                                        >
-                                            Курсты көру
-                                        </button>
+                                        <div className="bg-gray-100 text-black p-6 mt-4 w-full rounded-lg shadow-md">
+                                            {Array.isArray(courseMaterials) ? (
+                                                courseMaterials.map((material, index) => (
+                                                    <p key={index} className="mb-2">{material}</p>
+                                                ))
+                                            ) : (
+                                                <p>{courseMaterials}</p>
+                                            )}
+                                        </div>
                                     </div>
                                 ) : null}
-                            </div>
-                        )}
-                        {courseMaterials && courseMaterials.length > 0 && (
-                            <div className="mt-4">
-                                <h3 className="text-xl font-semibold text-[#2663EB] mt-4">Курс:</h3>
-                                <ul className="list-disc list-inside text-gray-700 mt-2">
-                                    {courseMaterials.map((material, index) => (
-                                        <li key={index}>{material}</li>
-                                    ))}
-                                </ul>
                             </div>
                         )}
                     </div>
